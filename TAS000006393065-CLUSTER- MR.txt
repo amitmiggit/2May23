@@ -1,0 +1,2392 @@
+TAS000006137356
+
+(1) Description of the Task to be done
+
+
+A Master release Upgrade updated the system to the most recent quartely pacthes for the SLES-SP[n] release currently in use. 
+
+NOTE: A Master Realese Upgrade must *always* be done on all VERITAS Cluster Nodes in a Veritas Cluster. It is *not* possible or supported to  upgrade only one server in a cluster. Downtime is thus required for *all* ResourceGroups (aka "Packages") in the Cluster.
+
+Note: SAPHANA Scaleout Clusters are treated as Standalone Nodes and must be requested with "server-unix-std:global|06|101a-MasterRelease Update(Physical)"
+
+The Change Manager/Co-Ordinator is responsible to also open any relevant tasks to the applications teams (e.g. Oracle/SAP) so the appropriate downtime before and post upgrade checks are executed after the MR upgrade.  
+
+Perform update of Linux server with current Master Release on BOTH Nodes 
+ATTENTION: This task must be ordered / approved by the operations responsible. 
+ATTENTION: Please ensure that your operating system is not older than SLES11SP4 if SecFS is installed. For more details please see: https://atc.bmwgroup.net/confluence/display/SECFS/Upgrade+Linux+Server+for+Client+EOL 
+
+lead times 
+---- During office hours: 1 day
+Run time : 6 Hours
+
+---- Please relate relevant CIs to the change
+
+---- Please update relevant CIs in CMDB if needed
+
+__________
+(2) Required Information
+
+CLUSTER Servernames: lpdbaibir1/lpdbaibir2
+
+NOTE:- Please contact the assignee of ORA task TAS000006392494
+
+* Please select at least one of these Checkboxes: 
+
+[ ] Servers can be booted without consultation
+[ X ] another Task Group must be informed before reboot
+[ ] a Contact Person must be informed before reboot
+
+* Mandatory if your system is using SEC-FS / Vormetric CoreGuard:
+
+[ ] Server has SEC-FS / an encrypted filesystem
+---- Accompanying task to Vormetric during the update is mandatory!
+---- Additional task to Vormetric for changing environment might be necessary!
+----
+---- Please contact <vormetric@list.bmw.com> for any queries or have a look at the website:
+---- https://atc.bmwgroup.net/confluence/display/SECFS/Upgrade+Linux+Server+for+Client+EOL
+
+
+Please change predefined answer if necessary:
+Task can be implemented at any time within the start-/end time: yes
+Technical contact must be explicitly informed before begin and after end of this task: no 
+
+__________
+(3) Additional Information (optional)
+
+__________
+(4) Lead and execution time
+
+Check Header
+
+__________
+(5) Contact Information
+Contact person for questions from server ops during task planing:
+PaaS-CPT@list.bmw.com
+(If none is provided, in case of an error the task is set to pending / error without previous contact)
+
+Contact person for questions from server ops during execution:
+PaaS-CPT@list.bmw.com
+(If none is provided, in case of an error the task is set to pending / error without previous contact)
+
+
+==============================================================================================================================
+
+
+lpdbaibir1:~ # hastatus -sum | grep -i online
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+
+
+lpdbaibir1:~ # cat /etc/BMW-release
+IMAGE_KIWI_NAME="BMW-SLES12SP2"
+IMAGE_KIWI_PROFILE="HW_DELL"
+IMAGE_KIWI_VERSION="2.4.0"
+IMAGE_KIWI_BUILD_DATE="2018-07-27"
+IMAGE_KIWI_BUILD_ID="deb2b9f81d85-11692a7"
+IMAGE_BMW_MR="2018Q03.01"
+IMAGE_BMW_STATUS="RELEASE"
+INSTALL_DATE="2018-08-14"
+LAST_IPU_VERSION="ipu_12.2_12.4"
+LAST_IPU_DATE="1601918515 2020-10-05 19:21:55 +0200"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210373 2021-07-25 12:52:53 +0200"
+lpdbaibir1:~ #
+
+
+lpdbaibir1:~ # cat /etc/BMW-release
+IMAGE_KIWI_NAME="BMW-SLES12SP2"
+IMAGE_KIWI_PROFILE="HW_DELL"
+IMAGE_KIWI_VERSION="2.4.0"
+IMAGE_KIWI_BUILD_DATE="2018-07-27"
+IMAGE_KIWI_BUILD_ID="deb2b9f81d85-11692a7"
+IMAGE_BMW_MR="2018Q03.01"
+IMAGE_BMW_STATUS="RELEASE"
+INSTALL_DATE="2018-08-14"
+LAST_IPU_VERSION="ipu_12.2_12.4"
+LAST_IPU_DATE="1601918515 2020-10-05 19:21:55 +0200"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210373 2021-07-25 12:52:53 +0200"
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # ls -l /etc/BMW-release
+-rw-r--r-- 1 root root 453 Jul 25  2021 /etc/BMW-release
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+
+=============================================================================================================
+
+lpdbaibir2:~ # hastatus -sum | grep -i online
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+lpdbaibir2:~ # cat /etc/BMW-release
+IMAGE_KIWI_NAME="BMW-SLES12SP2"
+IMAGE_KIWI_PROFILE="HW_DELL"
+IMAGE_KIWI_VERSION="2.4.0"
+IMAGE_KIWI_BUILD_DATE="2018-07-27"
+IMAGE_KIWI_BUILD_ID="deb2b9f81d85-11692a7"
+IMAGE_BMW_MR="2018Q03.01"
+IMAGE_BMW_STATUS="RELEASE"
+INSTALL_DATE="2018-08-14"
+HISTORY_MR_VERSION+=("2019Q02.00")
+HISTORY_MR_DATE+=("1557578998 2019-05-11 14:49:58 +0200")
+HISTORY_MR_VERSION+="2019Q02.00"
+HISTORY_MR_DATE+="1557579336 2019-05-11 14:55:36 +0200"
+LAST_IPU_VERSION="ipu_12.2_12.4"
+LAST_IPU_DATE="1601918534 2020-10-05 19:22:14 +0200"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210135 2021-07-25 12:48:55 +0200"
+lpdbaibir2:~ #
+lpdbaibir2:~ #
+lpdbaibir2:~ # ls -l /etc/BMW-release
+-rw-r--r-- 1 root root 635 Jul 25  2021 /etc/BMW-release
+lpdbaibir2:~ #
+
+
+===========================================================================
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ fullcheck lpdbaibir1
+====================================================================================================
+ Hardware Type: PowerEdge R740
+ Serial No.   : 7X05SP2
+ Node name    : lpdbaibir1
+ Local time   : Thu Apr 21 14:26:58 CEST 2022
+====================================================================================================
+ FQDN: lpdbaibir1.bmwgroup.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ OSVer: SUSE Linux Enterprise Server 12 (x86_64)
+ OSVer: VERSION = 12
+ OSVer: PATCHLEVEL = 4
+ OSVer: # This file is deprecated and will be removed in a future service pack or release.
+ OSVer: # Please check /etc/os-release for details about this release.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Uptime: Booted: 2022.01.14. 20:19:33
+ Uptime: Uptime: 96d 17h 7m 25s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ MR: M21-Q3-12.4                                                                        [OLD] [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Kernel: 4.12.14-95.71-default
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Glibc: 2.22-114.8.3.x86_64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BootL: /dev/sda: GRUB (GRUB)                                                                 [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LPFC: Driver module version: 12.0.0.10
+ LPFC:  HOST     MODEL          WWN                 STATE                   SPEED    SLOT  FW Rev       FW Target    FWOK
+ LPFC:   host15  LPe31002-M6-D  0x100000109b3c192f  Link Down               unknown  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host16  LPe31002-M6-D  0x100000109b3c1930  Link Up - Ready Fabric  16 Gbit  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host17  LPe31002-M6-D  0x100000109b3c1b06  Link Down               unknown  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host18  LPe31002-M6-D  0x100000109b3c1b07  Link Up - Ready Fabric  16 Gbit  ?     12.8.522.11  12.8.522.11  OK
+ LPFC: Firmware up-to-date                                                                    [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ETH:  OSDEV  PCI ID                 DRIVER     DRVVER   SPEED      DPLX  LINK  MAC ADDRESS        IP / SUBNET        IPV6 / PREFIX
+ ETH:  eth0   0000:17:00.0           ixgbe      5.1.0-k  10000Mb/s  Full  yes   24:6e:96:ba:7c:38  <bond0>
+ ETH:  eth1   0000:17:00.1           ixgbe      5.1.0-k  10000Mb/s  Full  yes   24:6e:96:ba:7c:39  10.100.128.17/24   2a03:1e80:a04:564::1:2/64
+ ETH:  eth2   0000:18:00.0           ixgbe      5.1.0-k  1000Mb/s   Full  yes   24:6e:96:ba:7c:3a  160.48.107.196/24  2a03:1e80:a03:501::1:196/64
+ ETH:  eth3   0000:65:00.1           ixgbe      5.1.0-k  10000Mb/s  Full  yes   b4:96:91:25:0b:52  <bond0>
+ ETH:  eth4   0000:18:00.1           ixgbe      5.1.0-k  -          -     no    24:6e:96:ba:7c:3b
+ ETH:  eth5   0000:65:00.0           ixgbe      5.1.0-k  -          -     no    b4:96:91:25:0b:50
+ ETH:  eth7   usb-0000:00:14.0-14.3  cdc_ether  -        -          -     yes   58:8a:5a:fb:0c:65  169.254.0.2/16
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BOND: Version: 3.7.1
+ BOND:   BONDDEV  OSDEV/IP          IPV6                       ACTIVE  PRIMARY  STATUS  FAILCOUNT  MAC ADDRESS
+ BOND:    bond0   160.46.183.18/24  2a03:1e80:a01:507::1:8/64
+ BOND:            eth0                                            +             up      0          24:6e:96:ba:7c:38
+ BOND:            eth3                                                          up      0          b4:96:91:25:0b:52
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LLDP: Interface  Link state  Speed      Duplex  Switch Chassis           Switch Port   VLAN ID
+ LLDP: eth0       UP          10000Mb/s  Full    ASMUCDH537.bmwgroup.net  Ethernet1/33  1071
+ LLDP: eth1       UP          10000Mb/s  Full    ASMUCDB536.bmwgroup.net  Ethernet1/41  3562
+ LLDP: eth2       UP          1000Mb/s   Full    ASMUCDA539.bmwgroup.net  Ethernet1/34  107
+ LLDP: eth3       UP          10000Mb/s  Full    ASMUCDH538.bmwgroup.net  Ethernet1/33  1071
+ LLDP: eth4       DOWN        -          -       -                        -             -
+ LLDP: eth5       DOWN        -          -       -                        -             -
+ LLDP: eth7       UP                             Not Present              Not Present   unknown
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ServiceTag: 7X05SP2 (17233130630)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BIOS: 2.11.2 (2.13.3)                                                                  [LOW][NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ RAID: 25.5.8.0001 (25.5.9.0001)                                                        [LOW][NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ IDRAC: 5.10.00.00 (Build 57) (5.10.00.00 (Build 57))                                   [ACT] [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ PSU: Redundancy overall status: Full (Full)                                                  [OK]
+ PSU: Power supplies:
+ PSU: Loc      S/N              Manufacturer         Type     Rev      FW         Wattage    Status
+ PSU: All PSUs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ RAM: Memory overall status: Ok (Ok)                                                          [OK]
+ RAM: Memory:
+ RAM:    Total: 393216  MB (384 GB)
+ RAM:    Slots: 12/24
+ RAM: Modules:
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM: All DIMMs good                                                                          [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ CPU: CPU overall status: Ok (Ok)                                                             [OK]
+ CPU:   Location  Speed      State    No.Cores  Status
+ CPU:   CPU1      3400  MHz  Present  6         Ok
+ CPU:   CPU2      -          -        -         -
+ CPU: All CPUs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ FAN: Fan overall status: Full (Full)                                                         [OK]
+ FAN:   Name               Current Speed  Status
+ FAN:   System Board Fan3  6000 RPM       Ok
+ FAN:   System Board Fan4  5880 RPM       Ok
+ FAN:   System Board Fan5  6120 RPM       Ok
+ FAN:   System Board Fan6  6120 RPM       Ok
+ FAN: All FANs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ HDD: Controller:
+ HDD:      Type:  PERC H730P Mini
+ HDD: Disks:
+ HDD: Loc    Status  State   Power    Media  Rev   Capacity   Vendor    ProdID        S/N           PartNr
+ HDD: 0:1:0  Ok      Online  Spun Up  HDD    KT39  558.38 GB  DELL(tm)  ST600MP0036   WAF2VBDN      CN0FPW68SGW0019J00JHA03
+ HDD: 0:1:1  Ok      Online  Spun Up  HDD    EE03  558.38 GB  DELL(tm)  AL14SXB60ENY  38J0A0CSFEHE  PH01W7HCTB20083J24NMA00
+ HDD:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ JobQueue: iDRAC jobs: 0 (0)                                                                  [OK]
+ JobQueue: Pending BIOS Settings: 0 (0)                                                       [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#F NOTE: DCODB returned empty string on CriticalEvent/lpdbaibir1 (no critical events)
+# (T)ags:
+#T      ipu_12.2_12.4
+# SODB end (0 FW Status notes, no remarks, 0 special configs, 0 events, 1 tags, host:lpdbaibir1)
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ fullcheck lpdbaibir2
+====================================================================================================
+ Hardware Type: PowerEdge R740
+ Serial No.   : 7X13SP2
+ Node name    : lpdbaibir2
+ Local time   : Thu Apr 21 14:32:12 CEST 2022
+====================================================================================================
+ FQDN: lpdbaibir2.bmwgroup.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ OSVer: SUSE Linux Enterprise Server 12 (x86_64)
+ OSVer: VERSION = 12
+ OSVer: PATCHLEVEL = 4
+ OSVer: # This file is deprecated and will be removed in a future service pack or release.
+ OSVer: # Please check /etc/os-release for details about this release.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Uptime: Booted: 2022.01.14. 20:29:30
+ Uptime: Uptime: 96d 17h 2m 42s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ MR: M21-Q3-12.4                                                                        [OLD] [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Kernel: 4.12.14-95.71-default
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Glibc: 2.22-114.8.3.x86_64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BootL: /dev/sda: GRUB (GRUB)                                                                 [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LPFC: Driver module version: 12.0.0.10
+ LPFC:  HOST     MODEL          WWN                 STATE                   SPEED    SLOT  FW Rev       FW Target    FWOK
+ LPFC:   host15  LPe31002-M6-D  0x100000109b3c18c0  Link Down               unknown  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host16  LPe31002-M6-D  0x100000109b3c18c1  Link Up - Ready Fabric  16 Gbit  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host17  LPe31002-M6-D  0x100000109b3c18b7  Link Down               unknown  ?     12.8.522.11  12.8.522.11  OK
+ LPFC:   host18  LPe31002-M6-D  0x100000109b3c18b8  Link Up - Ready Fabric  16 Gbit  ?     12.8.522.11  12.8.522.11  OK
+ LPFC: Firmware up-to-date                                                                    [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ETH:  OSDEV  PCI ID                 DRIVER     DRVVER   SPEED      DPLX  LINK  MAC ADDRESS        IP / SUBNET        IPV6 / PREFIX
+ ETH:  eth0   0000:17:00.0           ixgbe      5.1.0-k  10000Mb/s  Full  yes   24:6e:96:ba:80:c8  <bond0>
+ ETH:  eth1   0000:17:00.1           ixgbe      5.1.0-k  10000Mb/s  Full  yes   24:6e:96:ba:80:c9  10.100.128.21/24   2a03:1e80:a04:564::1:3/64
+ ETH:  eth2   0000:18:00.0           ixgbe      5.1.0-k  1000Mb/s   Full  yes   24:6e:96:ba:80:ca  160.48.107.198/24  2a03:1e80:a03:501::1:198/64
+ ETH:  eth3   0000:65:00.1           ixgbe      5.1.0-k  10000Mb/s  Full  yes   b4:96:91:25:10:ae  <bond0>
+ ETH:  eth4   0000:18:00.1           ixgbe      5.1.0-k  -          -     no    24:6e:96:ba:80:cb
+ ETH:  eth5   0000:65:00.0           ixgbe      5.1.0-k  -          -     no    b4:96:91:25:10:ac
+ ETH:  eth7   usb-0000:00:14.0-14.3  cdc_ether  -        -          -     yes   58:8a:5a:fb:0e:f3  169.254.0.2/16
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BOND: Version: 3.7.1
+ BOND:   BONDDEV  OSDEV/IP          IPV6                       ACTIVE  PRIMARY  STATUS  FAILCOUNT  MAC ADDRESS
+ BOND:    bond0   160.46.183.41/24  2a03:1e80:a01:507::1:9/64
+ BOND:            eth0                                            +             up      0          24:6e:96:ba:80:c8
+ BOND:            eth3                                                          up      0          b4:96:91:25:10:ae
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LLDP: Interface  Link state  Speed      Duplex  Switch Chassis           Switch Port   VLAN ID
+ LLDP: eth0       UP          10000Mb/s  Full    ASMUCDH411.bmwgroup.net  Ethernet1/21  1071
+ LLDP: eth1       UP          10000Mb/s  Full    ASMUCDB445.bmwgroup.net  Ethernet1/51  3562
+ LLDP: eth2       UP          1000Mb/s   Full    ASMUCDA413.bmwgroup.net  Ethernet1/19  107
+ LLDP: eth3       UP          10000Mb/s  Full    ASMUCDH412.bmwgroup.net  Ethernet1/21  1071
+ LLDP: eth4       DOWN        -          -       -                        -             -
+ LLDP: eth5       DOWN        -          -       -                        -             -
+ LLDP: eth7       UP                             Not Present              Not Present   unknown
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ServiceTag: 7X13SP2 (17234716934)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BIOS: 2.11.2 (2.13.3)                                                                  [LOW][NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ RAID: 25.5.8.0001 (25.5.9.0001)                                                        [LOW][NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ IDRAC: 5.10.00.00 (Build 57) (5.10.00.00 (Build 57))                                   [ACT] [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ PSU: Redundancy overall status: Full (Full)                                                  [OK]
+ PSU: Power supplies:
+ PSU: Loc      S/N              Manufacturer         Type     Rev      FW         Wattage    Status
+ PSU: PS1      PHARP00818002E   Unknown!             0PJMDN   A01      00.1B.53   750 W      Ok
+ PSU: PS2      PHARP00818002G   Unknown!             0PJMDN   A01      00.1B.53   750 W      Ok
+ PSU: All PSUs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ RAM: Memory overall status: Ok (Ok)                                                          [OK]
+ RAM: Memory:
+ RAM:    Total: 393216  MB (384 GB)
+ RAM:    Slots: 12/24
+ RAM: Modules:
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM:    32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,   32768 MB @ : Ok,
+ RAM: All DIMMs good                                                                          [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ CPU: CPU overall status: Ok (Ok)                                                             [OK]
+ CPU:   Location  Speed      State    No.Cores  Status
+ CPU:   CPU1      3400  MHz  Present  6         Ok
+ CPU:   CPU2      -          -        -         -
+ CPU: All CPUs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ FAN: Fan overall status: Full (Full)                                                         [OK]
+ FAN:   Name               Current Speed  Status
+ FAN:   System Board Fan3  5640 RPM       Ok
+ FAN:   System Board Fan4  5640 RPM       Ok
+ FAN:   System Board Fan5  5640 RPM       Ok
+ FAN:   System Board Fan6  5640 RPM       Ok
+ FAN: All FANs good                                                                           [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ HDD: Controller:
+ HDD:      Type:  PERC H730P Mini
+ HDD: Disks:
+ HDD: Loc    Status  State   Power    Media  Rev   Capacity   Vendor    ProdID        S/N           PartNr
+ HDD: 0:1:0  Ok      Online  Spun Up  HDD    EE03  558.38 GB  DELL(tm)  AL14SXB60ENY  38J0A0DXFEHE  PH01W7HCTB20083J24N5A00
+ HDD: 0:1:1  Ok      Online  Spun Up  HDD    EE03  558.38 GB  DELL(tm)  AL14SXB60ENY  38J0A0D7FEHE  PH01W7HCTB20083J24NQA00
+ HDD:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ JobQueue: iDRAC jobs: 0 (0)                                                                  [OK]
+ JobQueue: Pending BIOS Settings: 0 (0)                                                       [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#F NOTE: DCODB returned empty string on CriticalEvent/lpdbaibir2 (no critical events)
+# (T)ags:
+#T      ipu_12.2_12.4
+# SODB end (0 FW Status notes, no remarks, 0 special configs, 0 events, 1 tags, host:lpdbaibir2)
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+
+
+
+==========================================
+
+
+
+lpdbaibir1:~ # hastatus -sum|grep ONLINE|awk {'print$2" "$3'}
+NIC lpdbaibir1
+NIC lpdbaibir2
+ilaidwhd2i lpdbaibir2
+ildbdahui lpdbaibir2
+ildbviewi lpdbaibir2
+tlaidwhdt lpdbaibir1
+tldbahut lpdbaibir1
+tldbalphat lpdbaibir2
+tldbviewt lpdbaibir1
+lpdbaibir1:~ #
+
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+
+
+
+=====================================
+
+
+lpdbaibir1:/var/tmp # ./check_dlv_dgv.sh
+
+Checking host lpdbaibir1 SLES Release 12-SP4 VxVM Version 7.4.1 PL: 2805
+Installed VxVM Version: 7.4.1 PL 2805 on lpdbaibir1
+VxVM 7.4.1 supports: DLV 11-15
+VxVM 7.4.1 supports: DGV MAX 280
+VRTvcs Installed Version: 7.4.1 PL 0000 on lpdbaibir1
+
+
+Checking DiskLayout DLVs .. 7.4.1 Max supported DLV is 15
+
+LV /dev/vx/dsk/dgoracle/lvoracle has max DLV 15 OK
+LV /dev/vx/dsk/dgoracle/lvoracleaudit has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtredo2/lvredo2 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutredo2/lvredo2 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtredo2/lvredo2 has max DLV 15 OK
+
+Checking DiskGroup DGVs .. 7.4.1 Max supported DGV is 280
+
+DG dgoracle has max DGV 280 OK
+DG dgtlaidwhdtbkup has max DGV 280 OK
+DG dgtlaidwhdtdb has max DGV 280 OK
+DG dgtlaidwhdtredo1 has max DGV 280 OK
+DG dgtlaidwhdtredo2 has max DGV 280 OK
+DG dgtldbahutbkup has max DGV 280 OK
+DG dgtldbahutdb has max DGV 280 OK
+DG dgtldbahutredo1 has max DGV 280 OK
+DG dgtldbahutredo2 has max DGV 280 OK
+DG dgtldbviewtbkup has max DGV 280 OK
+DG dgtldbviewtdb has max DGV 280 OK
+DG dgtldbviewtredo1 has max DGV 280 OK
+DG dgtldbviewtredo2 has max DGV 280 OK
+
+Extra Patch Level Check for 7.4.1
+
+OK: VRTSvxvm Patch Level is 2805
+OK: VRTSodm Patch Level is 1700
+OK: VRTSvxfs Patch Level is 1700
+
+OK: Veritas VRTSvxvm 7.4.1 and VRTSvcs 7.4.1 Versions match
+
+
+
+===========================================================================
+
+lpdbaibir1:/var/tmp # vxdg list
+NAME         STATE           ID
+dgtlaidwhdtredo2 enabled,cds          1584523311.956.lpdbaibir1
+dgoracle     enabled,cds          1534493924.192.lpdbaibir1
+dgtlaidwhdtbkup enabled,cds          1584523287.944.lpdbaibir1
+dgtlaidwhdtdb enabled,cds          1584523296.948.lpdbaibir1
+dgtlaidwhdtredo1 enabled,cds          1584523303.952.lpdbaibir1
+dgtldbahutbkup enabled,cds          1584617167.972.lpdbaibir1
+dgtldbahutdb enabled,cds          1584617183.982.lpdbaibir1
+dgtldbahutredo1 enabled,cds          1584617191.988.lpdbaibir1
+dgtldbahutredo2 enabled,cds          1584617198.994.lpdbaibir1
+dgtldbviewtbkup enabled,cds          1584126820.868.lpdbaibir1
+dgtldbviewtdb enabled,cds          1584126833.874.lpdbaibir1
+dgtldbviewtredo1 enabled,cds          1584126839.880.lpdbaibir1
+dgtldbviewtredo2 enabled,cds          1584126846.886.lpdbaibir1
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+
+
+lpdbaibir2:~ # vxdg list
+NAME         STATE           ID
+dgtldbalphatredo2 enabled,cds          1542301556.236.lpdbaibir1
+dgilaidwhd2ibkup enabled,cds          1542295203.222.lpdbaibir1
+dgilaidwhd2idb enabled,cds          1542295205.224.lpdbaibir1
+dgilaidwhd2iredo1 enabled,cds          1542295208.226.lpdbaibir1
+dgilaidwhd2iredo2 enabled,cds          1542295209.228.lpdbaibir1
+dgildbdahuibkup enabled,cds          1553260929.474.lpdbaibir1
+dgildbdahuidb enabled,cds          1553260936.496.lpdbaibir1
+dgildbdahuiredo1 enabled,cds          1553260940.502.lpdbaibir1
+dgildbdahuiredo2 enabled,cds          1553260944.508.lpdbaibir1
+dgildbviewibkup enabled,cds          1550593015.328.lpdbaibir1
+dgildbviewidb enabled,cds          1550593018.330.lpdbaibir1
+dgildbviewiredo1 enabled,cds          1550593020.332.lpdbaibir1
+dgildbviewiredo2 enabled,cds          1550593023.334.lpdbaibir1
+dgoracle     enabled,cds          1534494240.64.lpdbaibir2
+dgtldbalphatbkup enabled,cds          1542301549.230.lpdbaibir1
+dgtldbalphatdb enabled,cds          1542301551.232.lpdbaibir1
+dgtldbalphatredo1 enabled,cds          1542301554.234.lpdbaibir1
+lpdbaibir2:~ #
+
+
+
+======================================================
+
+lpdbaibir1:/var/tmp # df -hPT | grep -i vxfs
+/dev/vx/dsk/dgoracle/lvoracle        vxfs      175G  124G   52G  71% /lfs/oracle
+/dev/vx/dsk/dgoracle/lvoracleaudit   vxfs       50G  334M   50G   1% /lfs/oracle_audit
+/dev/vx/dsk/dgtlaidwhdtredo1/lvredo1 vxfs       57G  8.5G   45G  16% /global/tlaidwhdt/redo1
+/dev/vx/dsk/dgtlaidwhdtredo2/lvredo2 vxfs       57G  8.1G   46G  16% /global/tlaidwhdt/redo2
+/dev/vx/dsk/dgtlaidwhdtbkup/lvbkup   vxfs      1.5T  1.9G  1.5T   1% /global/tlaidwhdt/bkup
+/dev/vx/dsk/dgtlaidwhdtdb/lvdb       vxfs      3.0T  1.5T  1.6T  50% /global/tlaidwhdt/db
+/dev/vx/dsk/dgtldbahutbkup/lvbkup    vxfs      507G   65G  439G  13% /global/tldbahut/bkup
+/dev/vx/dsk/dgtldbahutredo2/lvredo2  vxfs       57G  4.1G   49G   8% /global/tldbahut/redo2
+/dev/vx/dsk/dgtldbahutredo1/lvredo1  vxfs       57G  4.6G   49G   9% /global/tldbahut/redo1
+/dev/vx/dsk/dgtldbahutdb/lvdb        vxfs      4.5T  3.7T  868G  82% /global/tldbahut/db
+/dev/vx/dsk/dgtldbviewtredo1/lvredo1 vxfs       57G   33G   23G  60% /global/tldbviewt/redo1
+/dev/vx/dsk/dgtldbviewtbkup/lvbkup   vxfs      731G   31G  695G   5% /global/tldbviewt/bkup
+/dev/vx/dsk/dgtldbviewtredo2/lvredo2 vxfs       57G   33G   23G  59% /global/tldbviewt/redo2
+/dev/vx/dsk/dgtldbviewtdb/lvdb       vxfs      4.5T  1.8T  2.8T  39% /global/tldbviewt/db
+lpdbaibir1:/var/tmp # date
+Thu Apr 21 15:09:17 CEST 2022
+lpdbaibir1:/var/tmp #
+
+
+===========================================
+
+
+lpdbaibir1:/var/tmp # hastatus -sum
+
+-- SYSTEM STATE
+-- System               State                Frozen
+
+A  lpdbaibir1           RUNNING              0
+A  lpdbaibir2           RUNNING              0
+
+-- GROUP STATE
+-- Group           System               Probed     AutoDisabled    State
+
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir1           Y          N               OFFLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir1           Y          N               OFFLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir1           Y          N               OFFLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir2           Y          N               OFFLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir2           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir1           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+B  tldbviewt       lpdbaibir2           Y          N               OFFLINE
+lpdbaibir1:/var/tmp # date
+Thu Apr 21 15:14:06 CEST 2022
+lpdbaibir1:/var/tmp #
+
+lpdbaibir1:/var/tmp # san_shortinfo
+VXDEV              | RAW   CU:LDEV PORT SERIAL     SIZE | RAW   CU:LDEV PORT SERIAL     SIZE | DISKGROUP
+-------------------|-----------------------------------|-----------------------------------|----------
+hitachi_vspg1k0_0010 | sdcs  00:10   4G   10925   518602 | sdkw  00:10   3G   10925   518602 | dgtldbviewtdb
+hitachi_vspg1k0_0011 | sdy   00:11   4G   10925  2097152 | sdiv  00:11   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_002c | sdlf  00:2C   4G   10925  1048576 | sdli  00:2C   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_003b | sdz   00:3B   4G   10925   230490 | sdiw  00:3B   3G   10925   230490 | dgtldbviewtbkup
+hitachi_vspg1k0_0059 | sdad  00:59   4G   10925   518602 | sdja  00:59   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_00d7 | sdae  00:D7   4G   10925   518602 | sdjb  00:D7   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_00e2 | sdaf  00:E2   4G   10925   518602 | sdjc  00:E2   3G   10925   518602 |
+hitachi_vspg1k0_0107 | sdah  01:07   4G   10925  1048576 | sdje  01:07   3G   10925  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k0_010f | sdag  01:0F   4G   10925   518602 | sdjd  01:0F   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_012a | sdb   01:2A   4G   10925  1048576 | sdhc  01:2A   3G   10925  1048576 |
+hitachi_vspg1k0_012b | sdh   01:2B   4G   10925      900 | sdhp  01:2B   3G   10925      900 |
+hitachi_vspg1k0_012c | sdi   01:2C   4G   10925      900 | sdhr  01:2C   3G   10925      900 |
+hitachi_vspg1k0_012d | sdc   01:2D   4G   10925  1048576 | sdhf  01:2D   3G   10925  1048576 |
+hitachi_vspg1k0_012e | sdd   01:2E   4G   10925   518602 | sdhg  01:2E   3G   10925   518602 |
+hitachi_vspg1k0_0130 | sdm   01:30   4G   10925   518602 | sdhz  01:30   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0131 | sdn   01:31   4G   10925   518602 | sdib  01:31   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0132 | sdo   01:32   4G   10925   518602 | sdid  01:32   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0133 | sdp   01:33   4G   10925   518602 | sdie  01:33   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0134 | sdq   01:34   4G   10925   518602 | sdig  01:34   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0135 | sdr   01:35   4G   10925   518602 | sdii  01:35   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0136 | sds   01:36   4G   10925   518602 | sdij  01:36   3G   10925   518602 | dgtldbalphatbkup
+hitachi_vspg1k0_013e | sdaa  01:3E   4G   10925    14405 | sdix  01:3E   3G   10925    14405 | dgtldbalphatredo1
+hitachi_vspg1k0_013f | sdab  01:3F   4G   10925    14405 | sdiy  01:3F   3G   10925    14405 | dgtldbalphatredo2
+hitachi_vspg1k0_0140 | sdac  01:40   4G   10925   230490 | sdiz  01:40   3G   10925   230490 | dgoracle
+hitachi_vspg1k0_0172 | sdl   01:72   4G   10925  1048576 | sdhy  01:72   3G   10925  1048576 |
+hitachi_vspg1k0_0179 | sdt   01:79   4G   10925  1048576 | sdim  01:79   3G   10925  1048576 |
+hitachi_vspg1k0_01d6 | sde   01:D6   4G   10925   518602 | sdhi  01:D6   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_02b9 | sdkx  02:B9   4G   10925  1048576 | sdld  02:B9   3G   10925  1048576 | dgildbviewibkup
+hitachi_vspg1k0_02c9 | sdky  02:C9   4G   10925  1048576 | sdle  02:C9   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0319 | sdv   03:19   4G   10925   518602 | sdis  03:19   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_0322 | sdap  03:22   4G   10925   230490 | sdjm  03:22   3G   10925   230490 | dgildbdahuibkup
+hitachi_vspg1k0_0323 | sdak  03:23   4G   10925   518602 | sdjh  03:23   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0324 | sdal  03:24   4G   10925   518602 | sdji  03:24   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0325 | sdam  03:25   4G   10925   518602 | sdjj  03:25   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0326 | sdan  03:26   4G   10925   518602 | sdjk  03:26   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0327 | sdao  03:27   4G   10925   518602 | sdjl  03:27   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0328 | sdai  03:28   4G   10925    14405 | sdjf  03:28   3G   10925    14405 | dgildbdahuiredo1
+hitachi_vspg1k0_0329 | sdaj  03:29   4G   10925    14405 | sdjg  03:29   3G   10925    14405 | dgildbdahuiredo2
+hitachi_vspg1k0_03fb | sdaq  03:FB   4G   10925  1048576 | sdjn  03:FB   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_04a9 | sdw   04:A9   4G   10925   230490 | sdit  04:A9   3G   10925   230490 | dgildbviewidb
+hitachi_vspg1k0_04aa | sdx   04:AA   4G   10925  1048576 | sdiu  04:AA   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_084e | sdar  08:4E   4G   10925    14405 | sdjo  08:4E   3G   10925    14405 |
+hitachi_vspg1k0_084f | sdas  08:4F   4G   10925    14405 | sdjp  08:4F   3G   10925    14405 | dgildbviewiredo2
+hitachi_vspg1k0_0850 | sdat  08:50   4G   10925    14405 | sdjq  08:50   3G   10925    14405 | dgildbviewiredo1
+hitachi_vspg1k0_0851 | sdau  08:51   4G   10925    14405 | sdjr  08:51   3G   10925    14405 |
+hitachi_vspg1k0_0852 | sdav  08:52   4G   10925  1048576 | sdjs  08:52   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0853 | sdaw  08:53   4G   10925  1048576 | sdjt  08:53   3G   10925  1048576 |
+hitachi_vspg1k0_0854 | sdax  08:54   4G   10925   518602 | sdju  08:54   3G   10925   518602 |
+hitachi_vspg1k0_0855 | sday  08:55   4G   10925   518602 | sdjv  08:55   3G   10925   518602 |
+hitachi_vspg1k0_0856 | sdaz  08:56   4G   10925   518602 | sdjw  08:56   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_0857 | sdba  08:57   4G   10925   518602 | sdjx  08:57   3G   10925   518602 | dgildbviewidb
+hitachi_vspg1k0_0858 | sdbb  08:58   4G   10925   230490 | sdjy  08:58   3G   10925   230490 |
+hitachi_vspg1k0_0859 | sdbc  08:59   4G   10925   230490 | sdjz  08:59   3G   10925   230490 | dgildbviewibkup
+hitachi_vspg1k0_085a | sdbe  08:5A   4G   10925   518602 | sdka  08:5A   3G   10925   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k0_085b | sdbg  08:5B   4G   10925   518602 | sdkb  08:5B   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085c | sdbi  08:5C   4G   10925   518602 | sdkc  08:5C   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085d | sdbk  08:5D   4G   10925   518602 | sdkd  08:5D   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085e | sdbm  08:5E   4G   10925   518602 | sdke  08:5E   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085f | sdbo  08:5F   4G   10925   518602 | sdkf  08:5F   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0860 | sdbq  08:60   4G   10925   518602 | sdkg  08:60   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0861 | sdbr  08:61   4G   10925   518602 | sdkh  08:61   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0862 | sdbs  08:62   4G   10925   230490 | sdki  08:62   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0863 | sdca  08:63   4G   10925   230490 | sdkj  08:63   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0864 | sdcc  08:64   4G   10925   230490 | sdkk  08:64   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0865 | sdcd  08:65   4G   10925   230490 | sdkl  08:65   3G   10925   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k0_0866 | sdce  08:66   4G   10925    14405 | sdkm  08:66   3G   10925    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k0_0867 | sdcf  08:67   4G   10925    14405 | sdkn  08:67   3G   10925    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k0_0916 | sdg   09:16   4G   10925  2097152 | sdhm  09:16   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_0917 | sdf   09:17   4G   10925   518602 | sdhl  09:17   3G   10925   518602 | dgtldbviewtbkup
+hitachi_vspg1k0_0918 | sdj   09:18   4G   10925    57622 | sdht  09:18   3G   10925    57622 | dgtldbviewtredo1
+hitachi_vspg1k0_0919 | sdk   09:19   4G   10925    57622 | sdhv  09:19   3G   10925    57622 | dgtldbviewtredo2
+hitachi_vspg1k0_093d | sdcg  09:3D   4G   10925  4194304 | sdko  09:3D   3G   10925  4194304 | dgtldbahutdb
+hitachi_vspg1k0_093e | sdch  09:3E   4G   10925   518602 | sdkp  09:3E   3G   10925   518602 | dgtldbahutdb
+hitachi_vspg1k0_093f | sdci  09:3F   4G   10925    57622 | sdkq  09:3F   3G   10925    57622 | dgtldbahutredo1
+hitachi_vspg1k0_0940 | sdcj  09:40   4G   10925    57622 | sdkr  09:40   3G   10925    57622 | dgtldbahutredo2
+hitachi_vspg1k0_0943 | sdck  09:43   4G   10925  2097152 | sdks  09:43   3G   10925  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k0_0944 | sdcm  09:44   4G   10925   518602 | sdkt  09:44   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_0945 | sdcp  09:45   4G   10925    57622 | sdku  09:45   3G   10925    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k0_0946 | sdcr  09:46   4G   10925    57622 | sdkv  09:46   3G   10925    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k0_094a | sdu   09:4A   4G   10925   518602 | sdip  09:4A   3G   10925   518602 | dgtldbahutbkup
+hitachi_vspg1k1_0010 | sdgz  00:10   3G   10930   518602 | sdir  00:10   4G   10930   518602 | dgtldbviewtdb
+hitachi_vspg1k1_0011 | sddb  00:11   3G   10930  2097152 | sdej  00:11   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_002c | sdlh  00:2C   3G   10930  1048576 | sdlg  00:2C   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_003b | sdde  00:3B   3G   10930   230490 | sdek  00:3B   4G   10930   230490 | dgtldbviewtbkup
+hitachi_vspg1k1_0059 | sddo  00:59   3G   10930   518602 | sdet  00:59   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_00d7 | sddr  00:D7   3G   10930   518602 | sdeu  00:D7   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_00e2 | sddu  00:E2   3G   10930   518602 | sdew  00:E2   4G   10930   518602 |
+hitachi_vspg1k1_0107 | sddz  01:07   3G   10930  1048576 | sdfb  01:07   4G   10930  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k1_010f | sddy  01:0F   3G   10930   518602 | sdez  01:0F   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_012a | sdbd  01:2A   3G   10930  1048576 | sdcu  01:2A   4G   10930  1048576 |
+hitachi_vspg1k1_012b | sdbp  01:2B   3G   10930      900 | sddf  01:2B   4G   10930      900 |
+hitachi_vspg1k1_012c | sdbt  01:2C   3G   10930      900 | sddh  01:2C   4G   10930      900 |
+hitachi_vspg1k1_012d | sdbf  01:2D   3G   10930  1048576 | sdcv  01:2D   4G   10930  1048576 |
+hitachi_vspg1k1_012e | sdbh  01:2E   3G   10930   518602 | sdcw  01:2E   4G   10930   518602 |
+hitachi_vspg1k1_0130 | sdbx  01:30   3G   10930   518602 | sddn  01:30   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0131 | sdby  01:31   3G   10930   518602 | sddp  01:31   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0132 | sdbz  01:32   3G   10930   518602 | sddq  01:32   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0133 | sdcb  01:33   3G   10930   518602 | sdds  01:33   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0134 | sdcl  01:34   3G   10930   518602 | sddt  01:34   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0135 | sdcn  01:35   3G   10930   518602 | sddv  01:35   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0136 | sdco  01:36   3G   10930   518602 | sddw  01:36   4G   10930   518602 | dgtldbalphatbkup
+hitachi_vspg1k1_013e | sddg  01:3E   3G   10930    14405 | sdem  01:3E   4G   10930    14405 | dgtldbalphatredo1
+hitachi_vspg1k1_013f | sddk  01:3F   3G   10930    14405 | sdeo  01:3F   4G   10930    14405 | dgtldbalphatredo2
+hitachi_vspg1k1_0140 | sddm  01:40   3G   10930   230490 | sder  01:40   4G   10930   230490 | dgoracle
+hitachi_vspg1k1_0172 | sdbw  01:72   3G   10930  1048576 | sddl  01:72   4G   10930  1048576 |
+hitachi_vspg1k1_0179 | sdcq  01:79   3G   10930  1048576 | sddx  01:79   4G   10930  1048576 |
+hitachi_vspg1k1_01d6 | sdbj  01:D6   3G   10930   518602 | sdcy  01:D6   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_02b9 | sdlb  02:B9   3G   10930  1048576 | sdkz  02:B9   4G   10930  1048576 | dgildbviewibkup
+hitachi_vspg1k1_02c9 | sdlc  02:C9   3G   10930  1048576 | sdla  02:C9   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0319 | sdcx  03:19   3G   10930   518602 | sdec  03:19   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_0322 | sdep  03:22   3G   10930   230490 | sdga  03:22   4G   10930   230490 | dgildbdahuibkup
+hitachi_vspg1k1_0323 | sdef  03:23   3G   10930   518602 | sdfi  03:23   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0324 | sdeh  03:24   3G   10930   518602 | sdfk  03:24   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0325 | sdei  03:25   3G   10930   518602 | sdfm  03:25   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0326 | sdel  03:26   3G   10930   518602 | sdfo  03:26   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0327 | sden  03:27   3G   10930   518602 | sdfq  03:27   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0328 | sdeb  03:28   3G   10930    14405 | sdfe  03:28   4G   10930    14405 | dgildbdahuiredo1
+hitachi_vspg1k1_0329 | sded  03:29   3G   10930    14405 | sdfg  03:29   4G   10930    14405 | dgildbdahuiredo2
+hitachi_vspg1k1_03fb | sdeq  03:FB   3G   10930  1048576 | sdgc  03:FB   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_04a9 | sdcz  04:A9   3G   10930   230490 | sdee  04:A9   4G   10930   230490 | dgildbviewidb
+hitachi_vspg1k1_04aa | sdda  04:AA   3G   10930  1048576 | sdeg  04:AA   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_084e | sdes  08:4E   3G   10930    14405 | sdge  08:4E   4G   10930    14405 |
+hitachi_vspg1k1_084f | sdev  08:4F   3G   10930    14405 | sdgg  08:4F   4G   10930    14405 | dgildbviewiredo2
+hitachi_vspg1k1_0850 | sdex  08:50   3G   10930    14405 | sdgi  08:50   4G   10930    14405 | dgildbviewiredo1
+hitachi_vspg1k1_0851 | sdey  08:51   3G   10930    14405 | sdgj  08:51   4G   10930    14405 |
+hitachi_vspg1k1_0852 | sdfa  08:52   3G   10930  1048576 | sdgl  08:52   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0853 | sdfc  08:53   3G   10930  1048576 | sdgn  08:53   4G   10930  1048576 |
+hitachi_vspg1k1_0854 | sdfd  08:54   3G   10930   518602 | sdgp  08:54   4G   10930   518602 |
+hitachi_vspg1k1_0855 | sdff  08:55   3G   10930   518602 | sdgq  08:55   4G   10930   518602 |
+hitachi_vspg1k1_0856 | sdfh  08:56   3G   10930   518602 | sdgr  08:56   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_0857 | sdfj  08:57   3G   10930   518602 | sdgu  08:57   4G   10930   518602 | dgildbviewidb
+hitachi_vspg1k1_0858 | sdfl  08:58   3G   10930   230490 | sdgw  08:58   4G   10930   230490 |
+hitachi_vspg1k1_0859 | sdfn  08:59   3G   10930   230490 | sdha  08:59   4G   10930   230490 | dgildbviewibkup
+hitachi_vspg1k1_085a | sdfp  08:5A   3G   10930   518602 | sdhb  08:5A   4G   10930   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k1_085b | sdfr  08:5B   3G   10930   518602 | sdhd  08:5B   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085c | sdfs  08:5C   3G   10930   518602 | sdhe  08:5C   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085d | sdft  08:5D   3G   10930   518602 | sdhh  08:5D   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085e | sdfu  08:5E   3G   10930   518602 | sdhj  08:5E   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085f | sdfv  08:5F   3G   10930   518602 | sdhk  08:5F   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0860 | sdfw  08:60   3G   10930   518602 | sdhn  08:60   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0861 | sdfx  08:61   3G   10930   518602 | sdho  08:61   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0862 | sdfy  08:62   3G   10930   230490 | sdhq  08:62   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0863 | sdfz  08:63   3G   10930   230490 | sdhs  08:63   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0864 | sdgb  08:64   3G   10930   230490 | sdhu  08:64   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0865 | sdgd  08:65   3G   10930   230490 | sdhw  08:65   4G   10930   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k1_0866 | sdgf  08:66   3G   10930    14405 | sdhx  08:66   4G   10930    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k1_0867 | sdgh  08:67   3G   10930    14405 | sdia  08:67   4G   10930    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k1_0916 | sdbn  09:16   3G   10930  2097152 | sddd  09:16   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_0917 | sdbl  09:17   3G   10930   518602 | sddc  09:17   4G   10930   518602 | dgtldbviewtbkup
+hitachi_vspg1k1_0918 | sdbu  09:18   3G   10930    57622 | sddi  09:18   4G   10930    57622 | dgtldbviewtredo1
+hitachi_vspg1k1_0919 | sdbv  09:19   3G   10930    57622 | sddj  09:19   4G   10930    57622 | dgtldbviewtredo2
+hitachi_vspg1k1_093d | sdgk  09:3D   3G   10930  4194304 | sdic  09:3D   4G   10930  4194304 | dgtldbahutdb
+hitachi_vspg1k1_093e | sdgm  09:3E   3G   10930   518602 | sdif  09:3E   4G   10930   518602 | dgtldbahutdb
+hitachi_vspg1k1_093f | sdgo  09:3F   3G   10930    57622 | sdih  09:3F   4G   10930    57622 | dgtldbahutredo1
+hitachi_vspg1k1_0940 | sdgs  09:40   3G   10930    57622 | sdik  09:40   4G   10930    57622 | dgtldbahutredo2
+hitachi_vspg1k1_0943 | sdgt  09:43   3G   10930  2097152 | sdil  09:43   4G   10930  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k1_0944 | sdgv  09:44   3G   10930   518602 | sdin  09:44   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_0945 | sdgx  09:45   3G   10930    57622 | sdio  09:45   4G   10930    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k1_0946 | sdgy  09:46   3G   10930    57622 | sdiq  09:46   4G   10930    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k1_094a | sdct  09:4A   3G   10930   518602 | sdea  09:4A   4G   10930   518602 | dgtldbahutbkup
+
+
+
+
+lpdbaibir1:/var/tmp #
+
+
+
+============================
+
+
+
+
+
+
+
+lpdbaibir1:~ # hastatus -sum
+
+-- SYSTEM STATE
+-- System               State                Frozen
+
+A  lpdbaibir1           RUNNING              0
+A  lpdbaibir2           RUNNING              0
+
+-- GROUP STATE
+-- Group           System               Probed     AutoDisabled    State
+
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir1           Y          N               OFFLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir1           Y          N               OFFLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir1           Y          N               OFFLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir2           Y          N               OFFLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir2           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir1           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+B  tldbviewt       lpdbaibir2           Y          N               OFFLINE
+lpdbaibir1:~ # hastatus -sum | grep -i online
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # cat /etc/BMW-release
+IMAGE_KIWI_NAME="BMW-SLES12SP2"
+IMAGE_KIWI_PROFILE="HW_DELL"
+IMAGE_KIWI_VERSION="2.4.0"
+IMAGE_KIWI_BUILD_DATE="2018-07-27"
+IMAGE_KIWI_BUILD_ID="deb2b9f81d85-11692a7"
+IMAGE_BMW_MR="2018Q03.01"
+IMAGE_BMW_STATUS="RELEASE"
+INSTALL_DATE="2018-08-14"
+LAST_IPU_VERSION="ipu_12.2_12.4"
+LAST_IPU_DATE="1601918515 2020-10-05 19:21:55 +0200"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210373 2021-07-25 12:52:53 +0200"
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # ls -l /etc/BMW-release
+-rw-r--r-- 1 root root 453 Jul 25  2021 /etc/BMW-release
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # cat /etc/BMW-release;cat /etc/rudder_vars.lst
+IMAGE_KIWI_NAME="BMW-SLES12SP2"
+IMAGE_KIWI_PROFILE="HW_DELL"
+IMAGE_KIWI_VERSION="2.4.0"
+IMAGE_KIWI_BUILD_DATE="2018-07-27"
+IMAGE_KIWI_BUILD_ID="deb2b9f81d85-11692a7"
+IMAGE_BMW_MR="2018Q03.01"
+IMAGE_BMW_STATUS="RELEASE"
+INSTALL_DATE="2018-08-14"
+LAST_IPU_VERSION="ipu_12.2_12.4"
+LAST_IPU_DATE="1601918515 2020-10-05 19:21:55 +0200"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210373 2021-07-25 12:52:53 +0200"
+#########################
+## Whole File Generated by Rudder Rule APP-CMS-Variables
+## *** DO NOT EDIT ***
+## Directive: File CMS Rudder Variables
+## CMDVAR: sys.policy_hub, var_REPO, var_REPO_IP, var_REPO_FQDN, var_RUDDER_MR_VERSION, var_RUDDER_MR_DEFAULT
+
+
+RELAY="10.30.16.151"
+
+REPO="cm-repo-emea"
+REPO_IP="10.30.73.43"
+REPO_FQDN="cm-repo-emea.bmwgroup.net"
+RUDDER_MR_VERSION="2021Q03.00"
+RUDDER_MR_DEFAULT="2022Q02.00"
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # zypper lr
+Repository priorities are without effect. All enabled repositories share the same priority.
+
+#  | Alias                      | Name                       | Enabled | GPG Check | Refresh
+---+----------------------------+----------------------------+---------+-----------+--------
+ 1 | BMW-Custom                 | BMW-Custom                 | Yes     | (r ) Yes  | Yes
+ 2 | BMW-FW-Dell                | BMW-FW-Dell                | Yes     | (r ) Yes  | No
+ 3 | BMW-Internal               | BMW-Internal               | Yes     | (r ) Yes  | Yes
+ 4 | BMW-Patch-CVE              | BMW-Patch-CVE              | Yes     | (r ) Yes  | Yes
+ 5 | BMW-Patch-CVE-2021-3156    | BMW-Patch-CVE-2021-3156    | Yes     | (r ) Yes  | Yes
+ 6 | BMW-SLES12-SP4             | BMW-SLES12-SP4             | Yes     | (r ) Yes  | No
+ 7 | BMW-Software-ODBC          | BMW-Software-ODBC          | Yes     | (r ) Yes  | Yes
+ 8 | BMW-Software-Oracle-Custom | BMW-Software-Oracle-Custom | Yes     | (r ) Yes  | No
+ 9 | BMW-Software-Splunk        | BMW-Software-Splunk        | Yes     | (r ) Yes  | Yes
+10 | BMW-Software-UserSyncAgent | BMW-Software-UserSyncAgent | Yes     | (r ) Yes  | Yes
+11 | BMW-Software-Veritas       | BMW-Software-Veritas       | Yes     | (r ) Yes  | No
+12 | DAM-P                      | DAM-P                      | Yes     | (r ) Yes  | Yes
+13 | PBIS                       | PBIS                       | Yes     | (r ) Yes  | No
+14 | Vendor-Dell                | Vendor-Dell                | Yes     | (r ) Yes  | No
+15 | Veritas-netbackup-client   | Veritas-netbackup-client   | Yes     | (r ) Yes  | Yes
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # hastatus -sum|grep ONLINE|awk {'print$2" "$3'}
+NIC lpdbaibir1
+NIC lpdbaibir2
+ilaidwhd2i lpdbaibir2
+ildbdahui lpdbaibir2
+ildbviewi lpdbaibir2
+tlaidwhdt lpdbaibir1
+tldbahut lpdbaibir1
+tldbalphat lpdbaibir2
+tldbviewt lpdbaibir1
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # cd /var/tmp/
+lpdbaibir1:/var/tmp # /check_dlv_dgv.sh
+bash: /check_dlv_dgv.sh: No such file or directory
+lpdbaibir1:/var/tmp # ls -lrta
+total 6508
+drwxr-xr-x 1 root    root        38 Aug 14  2018 rudder
+-rwxr--r-- 1 root    root     19522 Oct 29  2018 migrate_rolemembers_to_AD.sh
+drwxr-xr-x 1 root    root        78 Jan 14  2019 overrides
+drwxr-xr-x 1 qqnagio nagios     288 Jan 15  2019 check_interfaces
+-rw-r--r-- 1 root    root       191 Feb 19  2019 pkgremoval-ildbviewi
+-rw-r--r-- 1 root    root      1322 Feb 19  2019 pkgremoval-shortinfo-ildbviewi
+-rw-r--r-- 1 root    root        61 Feb 19  2019 pkgremoval-dgnames-ildbviewi
+-rw-r--r-- 1 root    root       144 Feb 19  2019 pkgremoval-LDEV-BOX-pairs-ildbviewi
+-rw-r--r-- 1 root    root       314 Feb 19  2019 pkgremoval-resources-ildbviewi
+-rw-r--r-- 1 root    root       465 Feb 19  2019 pkgremoval-mountpoints-ildbviewi
+-rw-r--r-- 1 root    root      7388 Mar  9  2019 create.plalphabi1.cmd
+-rw------- 1 root    root       549 Oct 29  2019 LPDBAIBIR1-044_0
+-rw-r--r-- 1 qqvrts0 qqbmw        0 Nov 29  2019 vcsctl
+drwxr-xr-x 1 root    root       380 Oct  5  2020 bmw-snap
+-rw-r--r-- 1 root    root   6560526 Feb 12  2021 rudder-agent-latest.SLES.12.x86_64.rpm
+drwxr-xr-x 1 root    root       258 Mar 12  2021 ..
+drwxrwxr-x 1  720021 800223      20 Jul 22  2021 biosctl
+drwx------ 1 root    root        12 Jul 25  2021 zypptest
+-rw-r--r-- 1 qqnagio nagios   14259 Aug 13  2021 eventhandler.log
+-rwxrwxr-x 1 root    root     17687 Jan 10 08:12 check_dlv_dgv.sh
+drwx------ 1 root    root         6 Jan 14 20:20 systemd-private-0b3233e2e070469d913b435b855ea226-ntpd.service-WjcEaz
+drwxrwxrwt 1 root    root       744 Jan 14 20:48 .oracle
+drwxr-xr-x 1 root    root       152 Mar 19 06:34 tmpjobs
+drwxrwxrwt 1 root    root        70 Apr 20 17:17 .rdh
+-rw-r--r-- 1 qqnagio nagios    6304 Apr 21 13:33 saninfo.state
+drwxrwxrwt 1 root    root       938 Apr 21 14:55 .
+lpdbaibir1:/var/tmp # ./check_dlv_dgv.sh
+
+Checking host lpdbaibir1 SLES Release 12-SP4 VxVM Version 7.4.1 PL: 2805
+Installed VxVM Version: 7.4.1 PL 2805 on lpdbaibir1
+VxVM 7.4.1 supports: DLV 11-15
+VxVM 7.4.1 supports: DGV MAX 280
+VRTvcs Installed Version: 7.4.1 PL 0000 on lpdbaibir1
+
+
+Checking DiskLayout DLVs .. 7.4.1 Max supported DLV is 15
+
+LV /dev/vx/dsk/dgoracle/lvoracle has max DLV 15 OK
+LV /dev/vx/dsk/dgoracle/lvoracleaudit has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtlaidwhdtredo2/lvredo2 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbahutredo2/lvredo2 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtbkup/lvbkup has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtdb/lvdb has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtredo1/lvredo1 has max DLV 15 OK
+LV /dev/vx/dsk/dgtldbviewtredo2/lvredo2 has max DLV 15 OK
+
+Checking DiskGroup DGVs .. 7.4.1 Max supported DGV is 280
+
+DG dgoracle has max DGV 280 OK
+DG dgtlaidwhdtbkup has max DGV 280 OK
+DG dgtlaidwhdtdb has max DGV 280 OK
+DG dgtlaidwhdtredo1 has max DGV 280 OK
+DG dgtlaidwhdtredo2 has max DGV 280 OK
+DG dgtldbahutbkup has max DGV 280 OK
+DG dgtldbahutdb has max DGV 280 OK
+DG dgtldbahutredo1 has max DGV 280 OK
+DG dgtldbahutredo2 has max DGV 280 OK
+DG dgtldbviewtbkup has max DGV 280 OK
+DG dgtldbviewtdb has max DGV 280 OK
+DG dgtldbviewtredo1 has max DGV 280 OK
+DG dgtldbviewtredo2 has max DGV 280 OK
+
+Extra Patch Level Check for 7.4.1
+
+OK: VRTSvxvm Patch Level is 2805
+OK: VRTSodm Patch Level is 1700
+OK: VRTSvxfs Patch Level is 1700
+
+OK: Veritas VRTSvxvm 7.4.1 and VRTSvcs 7.4.1 Versions match
+
+lpdbaibir1:/var/tmp # vxdg list
+NAME         STATE           ID
+dgtlaidwhdtredo2 enabled,cds          1584523311.956.lpdbaibir1
+dgoracle     enabled,cds          1534493924.192.lpdbaibir1
+dgtlaidwhdtbkup enabled,cds          1584523287.944.lpdbaibir1
+dgtlaidwhdtdb enabled,cds          1584523296.948.lpdbaibir1
+dgtlaidwhdtredo1 enabled,cds          1584523303.952.lpdbaibir1
+dgtldbahutbkup enabled,cds          1584617167.972.lpdbaibir1
+dgtldbahutdb enabled,cds          1584617183.982.lpdbaibir1
+dgtldbahutredo1 enabled,cds          1584617191.988.lpdbaibir1
+dgtldbahutredo2 enabled,cds          1584617198.994.lpdbaibir1
+dgtldbviewtbkup enabled,cds          1584126820.868.lpdbaibir1
+dgtldbviewtdb enabled,cds          1584126833.874.lpdbaibir1
+dgtldbviewtredo1 enabled,cds          1584126839.880.lpdbaibir1
+dgtldbviewtredo2 enabled,cds          1584126846.886.lpdbaibir1
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # rpm -qa | grep -i vee
+lpdbaibir1:/var/tmp # df -hPT | grep -i vxfs
+/dev/vx/dsk/dgoracle/lvoracle        vxfs      175G  124G   52G  71% /lfs/oracle
+/dev/vx/dsk/dgoracle/lvoracleaudit   vxfs       50G  334M   50G   1% /lfs/oracle_audit
+/dev/vx/dsk/dgtlaidwhdtredo1/lvredo1 vxfs       57G  8.5G   45G  16% /global/tlaidwhdt/redo1
+/dev/vx/dsk/dgtlaidwhdtredo2/lvredo2 vxfs       57G  8.1G   46G  16% /global/tlaidwhdt/redo2
+/dev/vx/dsk/dgtlaidwhdtbkup/lvbkup   vxfs      1.5T  1.9G  1.5T   1% /global/tlaidwhdt/bkup
+/dev/vx/dsk/dgtlaidwhdtdb/lvdb       vxfs      3.0T  1.5T  1.6T  50% /global/tlaidwhdt/db
+/dev/vx/dsk/dgtldbahutbkup/lvbkup    vxfs      507G   65G  439G  13% /global/tldbahut/bkup
+/dev/vx/dsk/dgtldbahutredo2/lvredo2  vxfs       57G  4.1G   49G   8% /global/tldbahut/redo2
+/dev/vx/dsk/dgtldbahutredo1/lvredo1  vxfs       57G  4.6G   49G   9% /global/tldbahut/redo1
+/dev/vx/dsk/dgtldbahutdb/lvdb        vxfs      4.5T  3.7T  868G  82% /global/tldbahut/db
+/dev/vx/dsk/dgtldbviewtredo1/lvredo1 vxfs       57G   33G   23G  60% /global/tldbviewt/redo1
+/dev/vx/dsk/dgtldbviewtbkup/lvbkup   vxfs      731G   31G  695G   5% /global/tldbviewt/bkup
+/dev/vx/dsk/dgtldbviewtredo2/lvredo2 vxfs       57G   33G   23G  59% /global/tldbviewt/redo2
+/dev/vx/dsk/dgtldbviewtdb/lvdb       vxfs      4.5T  1.8T  2.8T  39% /global/tldbviewt/db
+lpdbaibir1:/var/tmp # date
+Thu Apr 21 15:09:17 CEST 2022
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # hastatus -sum
+
+-- SYSTEM STATE
+-- System               State                Frozen
+
+A  lpdbaibir1           RUNNING              0
+A  lpdbaibir2           RUNNING              0
+
+-- GROUP STATE
+-- Group           System               Probed     AutoDisabled    State
+
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir1           Y          N               OFFLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir1           Y          N               OFFLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir1           Y          N               OFFLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir2           Y          N               OFFLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir2           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir1           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+B  tldbviewt       lpdbaibir2           Y          N               OFFLINE
+lpdbaibir1:/var/tmp # date
+Thu Apr 21 15:14:06 CEST 2022
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # san_shortinfo
+VXDEV              | RAW   CU:LDEV PORT SERIAL     SIZE | RAW   CU:LDEV PORT SERIAL     SIZE | DISKGROUP
+-------------------|-----------------------------------|-----------------------------------|----------
+hitachi_vspg1k0_0010 | sdcs  00:10   4G   10925   518602 | sdkw  00:10   3G   10925   518602 | dgtldbviewtdb
+hitachi_vspg1k0_0011 | sdy   00:11   4G   10925  2097152 | sdiv  00:11   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_002c | sdlf  00:2C   4G   10925  1048576 | sdli  00:2C   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_003b | sdz   00:3B   4G   10925   230490 | sdiw  00:3B   3G   10925   230490 | dgtldbviewtbkup
+hitachi_vspg1k0_0059 | sdad  00:59   4G   10925   518602 | sdja  00:59   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_00d7 | sdae  00:D7   4G   10925   518602 | sdjb  00:D7   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_00e2 | sdaf  00:E2   4G   10925   518602 | sdjc  00:E2   3G   10925   518602 |
+hitachi_vspg1k0_0107 | sdah  01:07   4G   10925  1048576 | sdje  01:07   3G   10925  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k0_010f | sdag  01:0F   4G   10925   518602 | sdjd  01:0F   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_012a | sdb   01:2A   4G   10925  1048576 | sdhc  01:2A   3G   10925  1048576 |
+hitachi_vspg1k0_012b | sdh   01:2B   4G   10925      900 | sdhp  01:2B   3G   10925      900 |
+hitachi_vspg1k0_012c | sdi   01:2C   4G   10925      900 | sdhr  01:2C   3G   10925      900 |
+hitachi_vspg1k0_012d | sdc   01:2D   4G   10925  1048576 | sdhf  01:2D   3G   10925  1048576 |
+hitachi_vspg1k0_012e | sdd   01:2E   4G   10925   518602 | sdhg  01:2E   3G   10925   518602 |
+hitachi_vspg1k0_0130 | sdm   01:30   4G   10925   518602 | sdhz  01:30   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0131 | sdn   01:31   4G   10925   518602 | sdib  01:31   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0132 | sdo   01:32   4G   10925   518602 | sdid  01:32   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0133 | sdp   01:33   4G   10925   518602 | sdie  01:33   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0134 | sdq   01:34   4G   10925   518602 | sdig  01:34   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0135 | sdr   01:35   4G   10925   518602 | sdii  01:35   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0136 | sds   01:36   4G   10925   518602 | sdij  01:36   3G   10925   518602 | dgtldbalphatbkup
+hitachi_vspg1k0_013e | sdaa  01:3E   4G   10925    14405 | sdix  01:3E   3G   10925    14405 | dgtldbalphatredo1
+hitachi_vspg1k0_013f | sdab  01:3F   4G   10925    14405 | sdiy  01:3F   3G   10925    14405 | dgtldbalphatredo2
+hitachi_vspg1k0_0140 | sdac  01:40   4G   10925   230490 | sdiz  01:40   3G   10925   230490 | dgoracle
+hitachi_vspg1k0_0172 | sdl   01:72   4G   10925  1048576 | sdhy  01:72   3G   10925  1048576 |
+hitachi_vspg1k0_0179 | sdt   01:79   4G   10925  1048576 | sdim  01:79   3G   10925  1048576 |
+hitachi_vspg1k0_01d6 | sde   01:D6   4G   10925   518602 | sdhi  01:D6   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_02b9 | sdkx  02:B9   4G   10925  1048576 | sdld  02:B9   3G   10925  1048576 | dgildbviewibkup
+hitachi_vspg1k0_02c9 | sdky  02:C9   4G   10925  1048576 | sdle  02:C9   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0319 | sdv   03:19   4G   10925   518602 | sdis  03:19   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_0322 | sdap  03:22   4G   10925   230490 | sdjm  03:22   3G   10925   230490 | dgildbdahuibkup
+hitachi_vspg1k0_0323 | sdak  03:23   4G   10925   518602 | sdjh  03:23   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0324 | sdal  03:24   4G   10925   518602 | sdji  03:24   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0325 | sdam  03:25   4G   10925   518602 | sdjj  03:25   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0326 | sdan  03:26   4G   10925   518602 | sdjk  03:26   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0327 | sdao  03:27   4G   10925   518602 | sdjl  03:27   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0328 | sdai  03:28   4G   10925    14405 | sdjf  03:28   3G   10925    14405 | dgildbdahuiredo1
+hitachi_vspg1k0_0329 | sdaj  03:29   4G   10925    14405 | sdjg  03:29   3G   10925    14405 | dgildbdahuiredo2
+hitachi_vspg1k0_03fb | sdaq  03:FB   4G   10925  1048576 | sdjn  03:FB   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_04a9 | sdw   04:A9   4G   10925   230490 | sdit  04:A9   3G   10925   230490 | dgildbviewidb
+hitachi_vspg1k0_04aa | sdx   04:AA   4G   10925  1048576 | sdiu  04:AA   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_084e | sdar  08:4E   4G   10925    14405 | sdjo  08:4E   3G   10925    14405 |
+hitachi_vspg1k0_084f | sdas  08:4F   4G   10925    14405 | sdjp  08:4F   3G   10925    14405 | dgildbviewiredo2
+hitachi_vspg1k0_0850 | sdat  08:50   4G   10925    14405 | sdjq  08:50   3G   10925    14405 | dgildbviewiredo1
+hitachi_vspg1k0_0851 | sdau  08:51   4G   10925    14405 | sdjr  08:51   3G   10925    14405 |
+hitachi_vspg1k0_0852 | sdav  08:52   4G   10925  1048576 | sdjs  08:52   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0853 | sdaw  08:53   4G   10925  1048576 | sdjt  08:53   3G   10925  1048576 |
+hitachi_vspg1k0_0854 | sdax  08:54   4G   10925   518602 | sdju  08:54   3G   10925   518602 |
+hitachi_vspg1k0_0855 | sday  08:55   4G   10925   518602 | sdjv  08:55   3G   10925   518602 |
+hitachi_vspg1k0_0856 | sdaz  08:56   4G   10925   518602 | sdjw  08:56   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_0857 | sdba  08:57   4G   10925   518602 | sdjx  08:57   3G   10925   518602 | dgildbviewidb
+hitachi_vspg1k0_0858 | sdbb  08:58   4G   10925   230490 | sdjy  08:58   3G   10925   230490 |
+hitachi_vspg1k0_0859 | sdbc  08:59   4G   10925   230490 | sdjz  08:59   3G   10925   230490 | dgildbviewibkup
+hitachi_vspg1k0_085a | sdbe  08:5A   4G   10925   518602 | sdka  08:5A   3G   10925   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k0_085b | sdbg  08:5B   4G   10925   518602 | sdkb  08:5B   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085c | sdbi  08:5C   4G   10925   518602 | sdkc  08:5C   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085d | sdbk  08:5D   4G   10925   518602 | sdkd  08:5D   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085e | sdbm  08:5E   4G   10925   518602 | sdke  08:5E   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085f | sdbo  08:5F   4G   10925   518602 | sdkf  08:5F   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0860 | sdbq  08:60   4G   10925   518602 | sdkg  08:60   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0861 | sdbr  08:61   4G   10925   518602 | sdkh  08:61   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0862 | sdbs  08:62   4G   10925   230490 | sdki  08:62   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0863 | sdca  08:63   4G   10925   230490 | sdkj  08:63   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0864 | sdcc  08:64   4G   10925   230490 | sdkk  08:64   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0865 | sdcd  08:65   4G   10925   230490 | sdkl  08:65   3G   10925   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k0_0866 | sdce  08:66   4G   10925    14405 | sdkm  08:66   3G   10925    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k0_0867 | sdcf  08:67   4G   10925    14405 | sdkn  08:67   3G   10925    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k0_0916 | sdg   09:16   4G   10925  2097152 | sdhm  09:16   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_0917 | sdf   09:17   4G   10925   518602 | sdhl  09:17   3G   10925   518602 | dgtldbviewtbkup
+hitachi_vspg1k0_0918 | sdj   09:18   4G   10925    57622 | sdht  09:18   3G   10925    57622 | dgtldbviewtredo1
+hitachi_vspg1k0_0919 | sdk   09:19   4G   10925    57622 | sdhv  09:19   3G   10925    57622 | dgtldbviewtredo2
+hitachi_vspg1k0_093d | sdcg  09:3D   4G   10925  4194304 | sdko  09:3D   3G   10925  4194304 | dgtldbahutdb
+hitachi_vspg1k0_093e | sdch  09:3E   4G   10925   518602 | sdkp  09:3E   3G   10925   518602 | dgtldbahutdb
+hitachi_vspg1k0_093f | sdci  09:3F   4G   10925    57622 | sdkq  09:3F   3G   10925    57622 | dgtldbahutredo1
+hitachi_vspg1k0_0940 | sdcj  09:40   4G   10925    57622 | sdkr  09:40   3G   10925    57622 | dgtldbahutredo2
+hitachi_vspg1k0_0943 | sdck  09:43   4G   10925  2097152 | sdks  09:43   3G   10925  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k0_0944 | sdcm  09:44   4G   10925   518602 | sdkt  09:44   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_0945 | sdcp  09:45   4G   10925    57622 | sdku  09:45   3G   10925    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k0_0946 | sdcr  09:46   4G   10925    57622 | sdkv  09:46   3G   10925    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k0_094a | sdu   09:4A   4G   10925   518602 | sdip  09:4A   3G   10925   518602 | dgtldbahutbkup
+hitachi_vspg1k1_0010 | sdgz  00:10   3G   10930   518602 | sdir  00:10   4G   10930   518602 | dgtldbviewtdb
+hitachi_vspg1k1_0011 | sddb  00:11   3G   10930  2097152 | sdej  00:11   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_002c | sdlh  00:2C   3G   10930  1048576 | sdlg  00:2C   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_003b | sdde  00:3B   3G   10930   230490 | sdek  00:3B   4G   10930   230490 | dgtldbviewtbkup
+hitachi_vspg1k1_0059 | sddo  00:59   3G   10930   518602 | sdet  00:59   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_00d7 | sddr  00:D7   3G   10930   518602 | sdeu  00:D7   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_00e2 | sddu  00:E2   3G   10930   518602 | sdew  00:E2   4G   10930   518602 |
+hitachi_vspg1k1_0107 | sddz  01:07   3G   10930  1048576 | sdfb  01:07   4G   10930  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k1_010f | sddy  01:0F   3G   10930   518602 | sdez  01:0F   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_012a | sdbd  01:2A   3G   10930  1048576 | sdcu  01:2A   4G   10930  1048576 |
+hitachi_vspg1k1_012b | sdbp  01:2B   3G   10930      900 | sddf  01:2B   4G   10930      900 |
+hitachi_vspg1k1_012c | sdbt  01:2C   3G   10930      900 | sddh  01:2C   4G   10930      900 |
+hitachi_vspg1k1_012d | sdbf  01:2D   3G   10930  1048576 | sdcv  01:2D   4G   10930  1048576 |
+hitachi_vspg1k1_012e | sdbh  01:2E   3G   10930   518602 | sdcw  01:2E   4G   10930   518602 |
+hitachi_vspg1k1_0130 | sdbx  01:30   3G   10930   518602 | sddn  01:30   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0131 | sdby  01:31   3G   10930   518602 | sddp  01:31   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0132 | sdbz  01:32   3G   10930   518602 | sddq  01:32   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0133 | sdcb  01:33   3G   10930   518602 | sdds  01:33   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0134 | sdcl  01:34   3G   10930   518602 | sddt  01:34   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0135 | sdcn  01:35   3G   10930   518602 | sddv  01:35   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0136 | sdco  01:36   3G   10930   518602 | sddw  01:36   4G   10930   518602 | dgtldbalphatbkup
+hitachi_vspg1k1_013e | sddg  01:3E   3G   10930    14405 | sdem  01:3E   4G   10930    14405 | dgtldbalphatredo1
+hitachi_vspg1k1_013f | sddk  01:3F   3G   10930    14405 | sdeo  01:3F   4G   10930    14405 | dgtldbalphatredo2
+hitachi_vspg1k1_0140 | sddm  01:40   3G   10930   230490 | sder  01:40   4G   10930   230490 | dgoracle
+hitachi_vspg1k1_0172 | sdbw  01:72   3G   10930  1048576 | sddl  01:72   4G   10930  1048576 |
+hitachi_vspg1k1_0179 | sdcq  01:79   3G   10930  1048576 | sddx  01:79   4G   10930  1048576 |
+hitachi_vspg1k1_01d6 | sdbj  01:D6   3G   10930   518602 | sdcy  01:D6   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_02b9 | sdlb  02:B9   3G   10930  1048576 | sdkz  02:B9   4G   10930  1048576 | dgildbviewibkup
+hitachi_vspg1k1_02c9 | sdlc  02:C9   3G   10930  1048576 | sdla  02:C9   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0319 | sdcx  03:19   3G   10930   518602 | sdec  03:19   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_0322 | sdep  03:22   3G   10930   230490 | sdga  03:22   4G   10930   230490 | dgildbdahuibkup
+hitachi_vspg1k1_0323 | sdef  03:23   3G   10930   518602 | sdfi  03:23   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0324 | sdeh  03:24   3G   10930   518602 | sdfk  03:24   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0325 | sdei  03:25   3G   10930   518602 | sdfm  03:25   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0326 | sdel  03:26   3G   10930   518602 | sdfo  03:26   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0327 | sden  03:27   3G   10930   518602 | sdfq  03:27   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0328 | sdeb  03:28   3G   10930    14405 | sdfe  03:28   4G   10930    14405 | dgildbdahuiredo1
+hitachi_vspg1k1_0329 | sded  03:29   3G   10930    14405 | sdfg  03:29   4G   10930    14405 | dgildbdahuiredo2
+hitachi_vspg1k1_03fb | sdeq  03:FB   3G   10930  1048576 | sdgc  03:FB   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_04a9 | sdcz  04:A9   3G   10930   230490 | sdee  04:A9   4G   10930   230490 | dgildbviewidb
+hitachi_vspg1k1_04aa | sdda  04:AA   3G   10930  1048576 | sdeg  04:AA   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_084e | sdes  08:4E   3G   10930    14405 | sdge  08:4E   4G   10930    14405 |
+hitachi_vspg1k1_084f | sdev  08:4F   3G   10930    14405 | sdgg  08:4F   4G   10930    14405 | dgildbviewiredo2
+hitachi_vspg1k1_0850 | sdex  08:50   3G   10930    14405 | sdgi  08:50   4G   10930    14405 | dgildbviewiredo1
+hitachi_vspg1k1_0851 | sdey  08:51   3G   10930    14405 | sdgj  08:51   4G   10930    14405 |
+hitachi_vspg1k1_0852 | sdfa  08:52   3G   10930  1048576 | sdgl  08:52   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0853 | sdfc  08:53   3G   10930  1048576 | sdgn  08:53   4G   10930  1048576 |
+hitachi_vspg1k1_0854 | sdfd  08:54   3G   10930   518602 | sdgp  08:54   4G   10930   518602 |
+hitachi_vspg1k1_0855 | sdff  08:55   3G   10930   518602 | sdgq  08:55   4G   10930   518602 |
+hitachi_vspg1k1_0856 | sdfh  08:56   3G   10930   518602 | sdgr  08:56   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_0857 | sdfj  08:57   3G   10930   518602 | sdgu  08:57   4G   10930   518602 | dgildbviewidb
+hitachi_vspg1k1_0858 | sdfl  08:58   3G   10930   230490 | sdgw  08:58   4G   10930   230490 |
+hitachi_vspg1k1_0859 | sdfn  08:59   3G   10930   230490 | sdha  08:59   4G   10930   230490 | dgildbviewibkup
+hitachi_vspg1k1_085a | sdfp  08:5A   3G   10930   518602 | sdhb  08:5A   4G   10930   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k1_085b | sdfr  08:5B   3G   10930   518602 | sdhd  08:5B   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085c | sdfs  08:5C   3G   10930   518602 | sdhe  08:5C   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085d | sdft  08:5D   3G   10930   518602 | sdhh  08:5D   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085e | sdfu  08:5E   3G   10930   518602 | sdhj  08:5E   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085f | sdfv  08:5F   3G   10930   518602 | sdhk  08:5F   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0860 | sdfw  08:60   3G   10930   518602 | sdhn  08:60   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0861 | sdfx  08:61   3G   10930   518602 | sdho  08:61   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0862 | sdfy  08:62   3G   10930   230490 | sdhq  08:62   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0863 | sdfz  08:63   3G   10930   230490 | sdhs  08:63   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0864 | sdgb  08:64   3G   10930   230490 | sdhu  08:64   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0865 | sdgd  08:65   3G   10930   230490 | sdhw  08:65   4G   10930   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k1_0866 | sdgf  08:66   3G   10930    14405 | sdhx  08:66   4G   10930    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k1_0867 | sdgh  08:67   3G   10930    14405 | sdia  08:67   4G   10930    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k1_0916 | sdbn  09:16   3G   10930  2097152 | sddd  09:16   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_0917 | sdbl  09:17   3G   10930   518602 | sddc  09:17   4G   10930   518602 | dgtldbviewtbkup
+hitachi_vspg1k1_0918 | sdbu  09:18   3G   10930    57622 | sddi  09:18   4G   10930    57622 | dgtldbviewtredo1
+hitachi_vspg1k1_0919 | sdbv  09:19   3G   10930    57622 | sddj  09:19   4G   10930    57622 | dgtldbviewtredo2
+hitachi_vspg1k1_093d | sdgk  09:3D   3G   10930  4194304 | sdic  09:3D   4G   10930  4194304 | dgtldbahutdb
+hitachi_vspg1k1_093e | sdgm  09:3E   3G   10930   518602 | sdif  09:3E   4G   10930   518602 | dgtldbahutdb
+hitachi_vspg1k1_093f | sdgo  09:3F   3G   10930    57622 | sdih  09:3F   4G   10930    57622 | dgtldbahutredo1
+hitachi_vspg1k1_0940 | sdgs  09:40   3G   10930    57622 | sdik  09:40   4G   10930    57622 | dgtldbahutredo2
+hitachi_vspg1k1_0943 | sdgt  09:43   3G   10930  2097152 | sdil  09:43   4G   10930  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k1_0944 | sdgv  09:44   3G   10930   518602 | sdin  09:44   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_0945 | sdgx  09:45   3G   10930    57622 | sdio  09:45   4G   10930    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k1_0946 | sdgy  09:46   3G   10930    57622 | sdiq  09:46   4G   10930    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k1_094a | sdct  09:4A   3G   10930   518602 | sdea  09:4A   4G   10930   518602 | dgtldbahutbkup
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # cat /etc/BMW-release | grep -i mr
+IMAGE_BMW_MR="2018Q03.01"
+HISTORY_MR_VERSION+=("2020Q03.00")
+CURRENT_MR_VERSION="2021Q03.00"
+CURRENT_MR_DATE="1627210373 2021-07-25 12:52:53 +0200"
+lpdbaibir1:/var/tmp # vxdg list
+NAME         STATE           ID
+dgtlaidwhdtredo2 enabled,cds          1584523311.956.lpdbaibir1
+dgoracle     enabled,cds          1534493924.192.lpdbaibir1
+dgtlaidwhdtbkup enabled,cds          1584523287.944.lpdbaibir1
+dgtlaidwhdtdb enabled,cds          1584523296.948.lpdbaibir1
+dgtlaidwhdtredo1 enabled,cds          1584523303.952.lpdbaibir1
+dgtldbahutbkup enabled,cds          1584617167.972.lpdbaibir1
+dgtldbahutdb enabled,cds          1584617183.982.lpdbaibir1
+dgtldbahutredo1 enabled,cds          1584617191.988.lpdbaibir1
+dgtldbahutredo2 enabled,cds          1584617198.994.lpdbaibir1
+dgtldbviewtbkup enabled,cds          1584126820.868.lpdbaibir1
+dgtldbviewtdb enabled,cds          1584126833.874.lpdbaibir1
+dgtldbviewtredo1 enabled,cds          1584126839.880.lpdbaibir1
+dgtldbviewtredo2 enabled,cds          1584126846.886.lpdbaibir1
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # vxdg list | wc -l
+14
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # vxdisk -eo alldgs list
+DEVICE       TYPE           DISK        GROUP        STATUS               OS_NATIVE_NAME   ATTR
+hitachi_vspg1k0_00d7 auto:cdsdisk   19_10925_00d7  dgtlaidwhdtbkup online               sdae             hdprclm fc
+hitachi_vspg1k0_00e2 auto:none      -            -           online invalid thinrclm sdaf             hdprclm fc
+hitachi_vspg1k0_01d6 auto:cdsdisk   -            (dgildbdahuibkup) online               sde              hdprclm fc
+hitachi_vspg1k0_02b9 auto:cdsdisk   -            (dgildbviewibkup) online               sdkx             hdprclm fc
+hitachi_vspg1k0_02c9 auto:cdsdisk   -            (dgildbviewidb) online               sdky             hdprclm fc
+hitachi_vspg1k0_002c auto:cdsdisk   -            (dgildbdahuidb) online               sdlf             hdprclm fc
+hitachi_vspg1k0_003b auto:cdsdisk   19_10925_003b  dgtldbviewtbkup online               sdz              hdprclm fc
+hitachi_vspg1k0_03fb auto:cdsdisk   -            (dgildbdahuidb) online               sdaq             hdprclm fc
+hitachi_vspg1k0_04aa auto:cdsdisk   -            (dgildbviewidb) online               sdx              hdprclm fc
+hitachi_vspg1k0_04a9 auto:cdsdisk   -            (dgildbviewidb) online               sdw              hdprclm fc
+hitachi_vspg1k0_0010 auto:cdsdisk   19_10925_0010  dgtldbviewtdb online               sdcs             hdprclm fc
+hitachi_vspg1k0_010f auto:cdsdisk   19_10925_010f  dgtlaidwhdtbkup online               sdag             hdprclm fc
+hitachi_vspg1k0_0011 auto:cdsdisk   19_10925_0011  dgtldbviewtdb online               sdy              hdprclm fc
+hitachi_vspg1k0_012a auto:cdsdisk   -            -           online               sdb              hdprclm fc
+hitachi_vspg1k0_012b auto:cdsdisk   -            -           online thinrclm      sdh              hdprclm fc
+hitachi_vspg1k0_012c auto:cdsdisk   -            -           online thinrclm      sdi              hdprclm fc
+hitachi_vspg1k0_012d auto:none      -            -           online invalid thinrclm sdc              hdprclm fc
+hitachi_vspg1k0_012e auto:cdsdisk   -            -           online               sdd              hdprclm fc
+hitachi_vspg1k0_013e auto:cdsdisk   -            (dgtldbalphatredo1) online               sdaa             hdprclm fc
+hitachi_vspg1k0_013f auto:cdsdisk   -            (dgtldbalphatredo2) online               sdab             hdprclm fc
+hitachi_vspg1k0_0059 auto:cdsdisk   -            (dgildbviewibkup) online               sdad             hdprclm fc
+hitachi_vspg1k0_084e auto:none      -            -           online invalid thinrclm sdar             hdprclm fc
+hitachi_vspg1k0_084f auto:cdsdisk   -            (dgildbviewiredo2) online               sdas             hdprclm fc
+hitachi_vspg1k0_085a auto:cdsdisk   -            (dgilaidwhd2ibkup) online               sdbe             hdprclm fc
+hitachi_vspg1k0_085b auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbg             hdprclm fc
+hitachi_vspg1k0_085c auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbi             hdprclm fc
+hitachi_vspg1k0_085d auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbk             hdprclm fc
+hitachi_vspg1k0_085e auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbm             hdprclm fc
+hitachi_vspg1k0_085f auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbo             hdprclm fc
+hitachi_vspg1k0_093d auto:cdsdisk   19_10925_093d  dgtldbahutdb online               sdcg             hdprclm fc
+hitachi_vspg1k0_093e auto:cdsdisk   19_10925_093e  dgtldbahutdb online               sdch             hdprclm fc
+hitachi_vspg1k0_093f auto:cdsdisk   19_10925_093f  dgtldbahutredo1 online               sdci             hdprclm fc
+hitachi_vspg1k0_094a auto:cdsdisk   19_10925_094a  dgtldbahutbkup online               sdu              hdprclm fc
+hitachi_vspg1k0_0107 auto:cdsdisk   19_10925_0107  dgtlaidwhdtdb online               sdah             hdprclm fc
+hitachi_vspg1k0_0130 auto:cdsdisk   -            (dgtldbalphatdb) online               sdm              hdprclm fc
+hitachi_vspg1k0_0131 auto:cdsdisk   -            (dgtldbalphatdb) online               sdn              hdprclm fc
+hitachi_vspg1k0_0132 auto:cdsdisk   -            (dgtldbalphatdb) online               sdo              hdprclm fc
+hitachi_vspg1k0_0133 auto:cdsdisk   -            (dgtldbalphatdb) online               sdp              hdprclm fc
+hitachi_vspg1k0_0134 auto:cdsdisk   -            (dgtldbalphatdb) online               sdq              hdprclm fc
+hitachi_vspg1k0_0135 auto:cdsdisk   -            (dgtldbalphatdb) online               sdr              hdprclm fc
+hitachi_vspg1k0_0136 auto:cdsdisk   -            (dgtldbalphatbkup) online               sds              hdprclm fc
+hitachi_vspg1k0_0140 auto:cdsdisk   19_10925_0140  dgoracle    online               sdac             hdprclm fc
+hitachi_vspg1k0_0172 auto:none      -            -           online invalid thinrclm sdl              hdprclm fc
+hitachi_vspg1k0_0179 auto:none      -            -           online invalid thinrclm sdt              hdprclm fc
+hitachi_vspg1k0_0319 auto:cdsdisk   -            (dgildbdahuibkup) online               sdv              hdprclm fc
+hitachi_vspg1k0_0322 auto:cdsdisk   -            (dgildbdahuibkup) online               sdap             hdprclm fc
+hitachi_vspg1k0_0323 auto:cdsdisk   -            (dgildbdahuidb) online               sdak             hdprclm fc
+hitachi_vspg1k0_0324 auto:cdsdisk   -            (dgildbdahuidb) online               sdal             hdprclm fc
+hitachi_vspg1k0_0325 auto:cdsdisk   -            (dgildbdahuidb) online               sdam             hdprclm fc
+hitachi_vspg1k0_0326 auto:cdsdisk   -            (dgildbdahuidb) online               sdan             hdprclm fc
+hitachi_vspg1k0_0327 auto:cdsdisk   -            (dgildbdahuidb) online               sdao             hdprclm fc
+hitachi_vspg1k0_0328 auto:cdsdisk   -            (dgildbdahuiredo1) online               sdai             hdprclm fc
+hitachi_vspg1k0_0329 auto:cdsdisk   -            (dgildbdahuiredo2) online               sdaj             hdprclm fc
+hitachi_vspg1k0_0850 auto:cdsdisk   -            (dgildbviewiredo1) online               sdat             hdprclm fc
+hitachi_vspg1k0_0851 auto:none      -            -           online invalid thinrclm sdau             hdprclm fc
+hitachi_vspg1k0_0852 auto:cdsdisk   -            (dgildbviewidb) online               sdav             hdprclm fc
+hitachi_vspg1k0_0853 auto:none      -            -           online invalid thinrclm sdaw             hdprclm fc
+hitachi_vspg1k0_0854 auto:none      -            -           online invalid thinrclm sdax             hdprclm fc
+hitachi_vspg1k0_0855 auto:none      -            -           online invalid thinrclm sday             hdprclm fc
+hitachi_vspg1k0_0856 auto:cdsdisk   -            (dgildbviewibkup) online               sdaz             hdprclm fc
+hitachi_vspg1k0_0857 auto:cdsdisk   -            (dgildbviewidb) online               sdba             hdprclm fc
+hitachi_vspg1k0_0858 auto:none      -            -           online invalid thinrclm sdbb             hdprclm fc
+hitachi_vspg1k0_0859 auto:cdsdisk   -            (dgildbviewibkup) online               sdbc             hdprclm fc
+hitachi_vspg1k0_0860 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbq             hdprclm fc
+hitachi_vspg1k0_0861 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbr             hdprclm fc
+hitachi_vspg1k0_0862 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdbs             hdprclm fc
+hitachi_vspg1k0_0863 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdca             hdprclm fc
+hitachi_vspg1k0_0864 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdcc             hdprclm fc
+hitachi_vspg1k0_0865 auto:cdsdisk   -            (dgilaidwhd2ibkup) online               sdcd             hdprclm fc
+hitachi_vspg1k0_0866 auto:cdsdisk   -            (dgilaidwhd2iredo1) online               sdce             hdprclm fc
+hitachi_vspg1k0_0867 auto:cdsdisk   -            (dgilaidwhd2iredo2) online               sdcf             hdprclm fc
+hitachi_vspg1k0_0916 auto:cdsdisk   19_10925_0916  dgtldbviewtdb online               sdg              hdprclm fc
+hitachi_vspg1k0_0917 auto:cdsdisk   19_10925_0917  dgtldbviewtbkup online               sdf              hdprclm fc
+hitachi_vspg1k0_0918 auto:cdsdisk   19_10925_0918  dgtldbviewtredo1 online               sdj              hdprclm fc
+hitachi_vspg1k0_0919 auto:cdsdisk   19_10925_0919  dgtldbviewtredo2 online               sdk              hdprclm fc
+hitachi_vspg1k0_0940 auto:cdsdisk   19_10925_0940  dgtldbahutredo2 online               sdcj             hdprclm fc
+hitachi_vspg1k0_0943 auto:cdsdisk   19_10925_0943  dgtlaidwhdtdb online               sdck             hdprclm fc
+hitachi_vspg1k0_0944 auto:cdsdisk   19_10925_0944  dgtlaidwhdtbkup online               sdcm             hdprclm fc
+hitachi_vspg1k0_0945 auto:cdsdisk   19_10925_0945  dgtlaidwhdtredo1 online               sdcp             hdprclm fc
+hitachi_vspg1k0_0946 auto:cdsdisk   19_10925_0946  dgtlaidwhdtredo2 online               sdcr             hdprclm fc
+hitachi_vspg1k1_00d7 auto:cdsdisk   18_10930_00d7  dgtlaidwhdtbkup online               sddr             hdprclm fc
+hitachi_vspg1k1_00e2 auto:none      -            -           online invalid thinrclm sddu             hdprclm fc
+hitachi_vspg1k1_01d6 auto:cdsdisk   -            (dgildbdahuibkup) online               sdbj             hdprclm fc
+hitachi_vspg1k1_02b9 auto:cdsdisk   -            (dgildbviewibkup) online               sdlb             hdprclm fc
+hitachi_vspg1k1_02c9 auto:cdsdisk   -            (dgildbviewidb) online               sdlc             hdprclm fc
+hitachi_vspg1k1_002c auto:cdsdisk   -            (dgildbdahuidb) online               sdlh             hdprclm fc
+hitachi_vspg1k1_003b auto:cdsdisk   18_10930_003b  dgtldbviewtbkup online               sdde             hdprclm fc
+hitachi_vspg1k1_03fb auto:cdsdisk   -            (dgildbdahuidb) online               sdeq             hdprclm fc
+hitachi_vspg1k1_04aa auto:cdsdisk   -            (dgildbviewidb) online               sdda             hdprclm fc
+hitachi_vspg1k1_04a9 auto:cdsdisk   -            (dgildbviewidb) online               sdcz             hdprclm fc
+hitachi_vspg1k1_0010 auto:cdsdisk   18_10930_0010  dgtldbviewtdb online               sdgz             hdprclm fc
+hitachi_vspg1k1_010f auto:cdsdisk   18_10930_010f  dgtlaidwhdtbkup online               sddy             hdprclm fc
+hitachi_vspg1k1_0011 auto:cdsdisk   18_10930_0011  dgtldbviewtdb online               sddb             hdprclm fc
+hitachi_vspg1k1_012a auto:cdsdisk   -            -           online               sdbd             hdprclm fc
+hitachi_vspg1k1_012b auto:cdsdisk   -            -           online thinrclm      sdbp             hdprclm fc
+hitachi_vspg1k1_012c auto:cdsdisk   -            -           online thinrclm      sdbt             hdprclm fc
+hitachi_vspg1k1_012d auto:none      -            -           online invalid thinrclm sdbf             hdprclm fc
+hitachi_vspg1k1_012e auto:cdsdisk   -            -           online               sdbh             hdprclm fc
+hitachi_vspg1k1_013e auto:cdsdisk   -            (dgtldbalphatredo1) online               sddg             hdprclm fc
+hitachi_vspg1k1_013f auto:cdsdisk   -            (dgtldbalphatredo2) online               sddk             hdprclm fc
+hitachi_vspg1k1_0059 auto:cdsdisk   -            (dgildbviewibkup) online               sddo             hdprclm fc
+hitachi_vspg1k1_084e auto:none      -            -           online invalid thinrclm sdes             hdprclm fc
+hitachi_vspg1k1_084f auto:cdsdisk   -            (dgildbviewiredo2) online               sdev             hdprclm fc
+hitachi_vspg1k1_085a auto:cdsdisk   -            (dgilaidwhd2ibkup) online               sdfp             hdprclm fc
+hitachi_vspg1k1_085b auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfr             hdprclm fc
+hitachi_vspg1k1_085c auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfs             hdprclm fc
+hitachi_vspg1k1_085d auto:cdsdisk   -            (dgilaidwhd2idb) online               sdft             hdprclm fc
+hitachi_vspg1k1_085e auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfu             hdprclm fc
+hitachi_vspg1k1_085f auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfv             hdprclm fc
+hitachi_vspg1k1_093d auto:cdsdisk   18_10930_093d  dgtldbahutdb online               sdgk             hdprclm fc
+hitachi_vspg1k1_093e auto:cdsdisk   18_10930_093e  dgtldbahutdb online               sdgm             hdprclm fc
+hitachi_vspg1k1_093f auto:cdsdisk   18_10930_093f  dgtldbahutredo1 online               sdgo             hdprclm fc
+hitachi_vspg1k1_094a auto:cdsdisk   18_10930_094a  dgtldbahutbkup online               sdct             hdprclm fc
+hitachi_vspg1k1_0107 auto:cdsdisk   18_10930_0107  dgtlaidwhdtdb online               sddz             hdprclm fc
+hitachi_vspg1k1_0130 auto:cdsdisk   -            (dgtldbalphatdb) online               sdbx             hdprclm fc
+hitachi_vspg1k1_0131 auto:cdsdisk   -            (dgtldbalphatdb) online               sdby             hdprclm fc
+hitachi_vspg1k1_0132 auto:cdsdisk   -            (dgtldbalphatdb) online               sdbz             hdprclm fc
+hitachi_vspg1k1_0133 auto:cdsdisk   -            (dgtldbalphatdb) online               sdcb             hdprclm fc
+hitachi_vspg1k1_0134 auto:cdsdisk   -            (dgtldbalphatdb) online               sdcl             hdprclm fc
+hitachi_vspg1k1_0135 auto:cdsdisk   -            (dgtldbalphatdb) online               sdcn             hdprclm fc
+hitachi_vspg1k1_0136 auto:cdsdisk   -            (dgtldbalphatbkup) online               sdco             hdprclm fc
+hitachi_vspg1k1_0140 auto:cdsdisk   18_10930_0140  dgoracle    online               sddm             hdprclm fc
+hitachi_vspg1k1_0172 auto:none      -            -           online invalid thinrclm sdbw             hdprclm fc
+hitachi_vspg1k1_0179 auto:none      -            -           online invalid thinrclm sdcq             hdprclm fc
+hitachi_vspg1k1_0319 auto:cdsdisk   -            (dgildbdahuibkup) online               sdcx             hdprclm fc
+hitachi_vspg1k1_0322 auto:cdsdisk   -            (dgildbdahuibkup) online               sdep             hdprclm fc
+hitachi_vspg1k1_0323 auto:cdsdisk   -            (dgildbdahuidb) online               sdef             hdprclm fc
+hitachi_vspg1k1_0324 auto:cdsdisk   -            (dgildbdahuidb) online               sdeh             hdprclm fc
+hitachi_vspg1k1_0325 auto:cdsdisk   -            (dgildbdahuidb) online               sdei             hdprclm fc
+hitachi_vspg1k1_0326 auto:cdsdisk   -            (dgildbdahuidb) online               sdel             hdprclm fc
+hitachi_vspg1k1_0327 auto:cdsdisk   -            (dgildbdahuidb) online               sden             hdprclm fc
+hitachi_vspg1k1_0328 auto:cdsdisk   -            (dgildbdahuiredo1) online               sdeb             hdprclm fc
+hitachi_vspg1k1_0329 auto:cdsdisk   -            (dgildbdahuiredo2) online               sded             hdprclm fc
+hitachi_vspg1k1_0850 auto:cdsdisk   -            (dgildbviewiredo1) online               sdex             hdprclm fc
+hitachi_vspg1k1_0851 auto:none      -            -           online invalid thinrclm sdey             hdprclm fc
+hitachi_vspg1k1_0852 auto:cdsdisk   -            (dgildbviewidb) online               sdfa             hdprclm fc
+hitachi_vspg1k1_0853 auto:none      -            -           online invalid thinrclm sdfc             hdprclm fc
+hitachi_vspg1k1_0854 auto:none      -            -           online invalid thinrclm sdfd             hdprclm fc
+hitachi_vspg1k1_0855 auto:none      -            -           online invalid thinrclm sdff             hdprclm fc
+hitachi_vspg1k1_0856 auto:cdsdisk   -            (dgildbviewibkup) online               sdfh             hdprclm fc
+hitachi_vspg1k1_0857 auto:cdsdisk   -            (dgildbviewidb) online               sdfj             hdprclm fc
+hitachi_vspg1k1_0858 auto:none      -            -           online invalid thinrclm sdfl             hdprclm fc
+hitachi_vspg1k1_0859 auto:cdsdisk   -            (dgildbviewibkup) online               sdfn             hdprclm fc
+hitachi_vspg1k1_0860 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfw             hdprclm fc
+hitachi_vspg1k1_0861 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfx             hdprclm fc
+hitachi_vspg1k1_0862 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfy             hdprclm fc
+hitachi_vspg1k1_0863 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdfz             hdprclm fc
+hitachi_vspg1k1_0864 auto:cdsdisk   -            (dgilaidwhd2idb) online               sdgb             hdprclm fc
+hitachi_vspg1k1_0865 auto:cdsdisk   -            (dgilaidwhd2ibkup) online               sdgd             hdprclm fc
+hitachi_vspg1k1_0866 auto:cdsdisk   -            (dgilaidwhd2iredo1) online               sdgf             hdprclm fc
+hitachi_vspg1k1_0867 auto:cdsdisk   -            (dgilaidwhd2iredo2) online               sdgh             hdprclm fc
+hitachi_vspg1k1_0916 auto:cdsdisk   18_10930_0916  dgtldbviewtdb online               sdbn             hdprclm fc
+hitachi_vspg1k1_0917 auto:cdsdisk   18_10930_0917  dgtldbviewtbkup online               sdbl             hdprclm fc
+hitachi_vspg1k1_0918 auto:cdsdisk   18_10930_0918  dgtldbviewtredo1 online               sdbu             hdprclm fc
+hitachi_vspg1k1_0919 auto:cdsdisk   18_10930_0919  dgtldbviewtredo2 online               sdbv             hdprclm fc
+hitachi_vspg1k1_0940 auto:cdsdisk   18_10930_0940  dgtldbahutredo2 online               sdgs             hdprclm fc
+hitachi_vspg1k1_0943 auto:cdsdisk   18_10930_0943  dgtlaidwhdtdb online               sdgt             hdprclm fc
+hitachi_vspg1k1_0944 auto:cdsdisk   18_10930_0944  dgtlaidwhdtbkup online               sdgv             hdprclm fc
+hitachi_vspg1k1_0945 auto:cdsdisk   18_10930_0945  dgtlaidwhdtredo1 online               sdgx             hdprclm fc
+hitachi_vspg1k1_0946 auto:cdsdisk   18_10930_0946  dgtlaidwhdtredo2 online               sdgy             hdprclm fc
+lpdbaibir1_disk_0 auto:none      -            -           online invalid       sda              -
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # vxdisk -eo alldgs list | wc -l
+162
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # san_shortinfo | wc -l
+162
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # san_shortinfo
+VXDEV              | RAW   CU:LDEV PORT SERIAL     SIZE | RAW   CU:LDEV PORT SERIAL     SIZE | DISKGROUP
+-------------------|-----------------------------------|-----------------------------------|----------
+hitachi_vspg1k0_0010 | sdcs  00:10   4G   10925   518602 | sdkw  00:10   3G   10925   518602 | dgtldbviewtdb
+hitachi_vspg1k0_0011 | sdy   00:11   4G   10925  2097152 | sdiv  00:11   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_002c | sdlf  00:2C   4G   10925  1048576 | sdli  00:2C   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_003b | sdz   00:3B   4G   10925   230490 | sdiw  00:3B   3G   10925   230490 | dgtldbviewtbkup
+hitachi_vspg1k0_0059 | sdad  00:59   4G   10925   518602 | sdja  00:59   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_00d7 | sdae  00:D7   4G   10925   518602 | sdjb  00:D7   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_00e2 | sdaf  00:E2   4G   10925   518602 | sdjc  00:E2   3G   10925   518602 |
+hitachi_vspg1k0_0107 | sdah  01:07   4G   10925  1048576 | sdje  01:07   3G   10925  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k0_010f | sdag  01:0F   4G   10925   518602 | sdjd  01:0F   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_012a | sdb   01:2A   4G   10925  1048576 | sdhc  01:2A   3G   10925  1048576 |
+hitachi_vspg1k0_012b | sdh   01:2B   4G   10925      900 | sdhp  01:2B   3G   10925      900 |
+hitachi_vspg1k0_012c | sdi   01:2C   4G   10925      900 | sdhr  01:2C   3G   10925      900 |
+hitachi_vspg1k0_012d | sdc   01:2D   4G   10925  1048576 | sdhf  01:2D   3G   10925  1048576 |
+hitachi_vspg1k0_012e | sdd   01:2E   4G   10925   518602 | sdhg  01:2E   3G   10925   518602 |
+hitachi_vspg1k0_0130 | sdm   01:30   4G   10925   518602 | sdhz  01:30   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0131 | sdn   01:31   4G   10925   518602 | sdib  01:31   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0132 | sdo   01:32   4G   10925   518602 | sdid  01:32   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0133 | sdp   01:33   4G   10925   518602 | sdie  01:33   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0134 | sdq   01:34   4G   10925   518602 | sdig  01:34   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0135 | sdr   01:35   4G   10925   518602 | sdii  01:35   3G   10925   518602 | dgtldbalphatdb
+hitachi_vspg1k0_0136 | sds   01:36   4G   10925   518602 | sdij  01:36   3G   10925   518602 | dgtldbalphatbkup
+hitachi_vspg1k0_013e | sdaa  01:3E   4G   10925    14405 | sdix  01:3E   3G   10925    14405 | dgtldbalphatredo1
+hitachi_vspg1k0_013f | sdab  01:3F   4G   10925    14405 | sdiy  01:3F   3G   10925    14405 | dgtldbalphatredo2
+hitachi_vspg1k0_0140 | sdac  01:40   4G   10925   230490 | sdiz  01:40   3G   10925   230490 | dgoracle
+hitachi_vspg1k0_0172 | sdl   01:72   4G   10925  1048576 | sdhy  01:72   3G   10925  1048576 |
+hitachi_vspg1k0_0179 | sdt   01:79   4G   10925  1048576 | sdim  01:79   3G   10925  1048576 |
+hitachi_vspg1k0_01d6 | sde   01:D6   4G   10925   518602 | sdhi  01:D6   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_02b9 | sdkx  02:B9   4G   10925  1048576 | sdld  02:B9   3G   10925  1048576 | dgildbviewibkup
+hitachi_vspg1k0_02c9 | sdky  02:C9   4G   10925  1048576 | sdle  02:C9   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0319 | sdv   03:19   4G   10925   518602 | sdis  03:19   3G   10925   518602 | dgildbdahuibkup
+hitachi_vspg1k0_0322 | sdap  03:22   4G   10925   230490 | sdjm  03:22   3G   10925   230490 | dgildbdahuibkup
+hitachi_vspg1k0_0323 | sdak  03:23   4G   10925   518602 | sdjh  03:23   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0324 | sdal  03:24   4G   10925   518602 | sdji  03:24   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0325 | sdam  03:25   4G   10925   518602 | sdjj  03:25   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0326 | sdan  03:26   4G   10925   518602 | sdjk  03:26   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0327 | sdao  03:27   4G   10925   518602 | sdjl  03:27   3G   10925   518602 | dgildbdahuidb
+hitachi_vspg1k0_0328 | sdai  03:28   4G   10925    14405 | sdjf  03:28   3G   10925    14405 | dgildbdahuiredo1
+hitachi_vspg1k0_0329 | sdaj  03:29   4G   10925    14405 | sdjg  03:29   3G   10925    14405 | dgildbdahuiredo2
+hitachi_vspg1k0_03fb | sdaq  03:FB   4G   10925  1048576 | sdjn  03:FB   3G   10925  1048576 | dgildbdahuidb
+hitachi_vspg1k0_04a9 | sdw   04:A9   4G   10925   230490 | sdit  04:A9   3G   10925   230490 | dgildbviewidb
+hitachi_vspg1k0_04aa | sdx   04:AA   4G   10925  1048576 | sdiu  04:AA   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_084e | sdar  08:4E   4G   10925    14405 | sdjo  08:4E   3G   10925    14405 |
+hitachi_vspg1k0_084f | sdas  08:4F   4G   10925    14405 | sdjp  08:4F   3G   10925    14405 | dgildbviewiredo2
+hitachi_vspg1k0_0850 | sdat  08:50   4G   10925    14405 | sdjq  08:50   3G   10925    14405 | dgildbviewiredo1
+hitachi_vspg1k0_0851 | sdau  08:51   4G   10925    14405 | sdjr  08:51   3G   10925    14405 |
+hitachi_vspg1k0_0852 | sdav  08:52   4G   10925  1048576 | sdjs  08:52   3G   10925  1048576 | dgildbviewidb
+hitachi_vspg1k0_0853 | sdaw  08:53   4G   10925  1048576 | sdjt  08:53   3G   10925  1048576 |
+hitachi_vspg1k0_0854 | sdax  08:54   4G   10925   518602 | sdju  08:54   3G   10925   518602 |
+hitachi_vspg1k0_0855 | sday  08:55   4G   10925   518602 | sdjv  08:55   3G   10925   518602 |
+hitachi_vspg1k0_0856 | sdaz  08:56   4G   10925   518602 | sdjw  08:56   3G   10925   518602 | dgildbviewibkup
+hitachi_vspg1k0_0857 | sdba  08:57   4G   10925   518602 | sdjx  08:57   3G   10925   518602 | dgildbviewidb
+hitachi_vspg1k0_0858 | sdbb  08:58   4G   10925   230490 | sdjy  08:58   3G   10925   230490 |
+hitachi_vspg1k0_0859 | sdbc  08:59   4G   10925   230490 | sdjz  08:59   3G   10925   230490 | dgildbviewibkup
+hitachi_vspg1k0_085a | sdbe  08:5A   4G   10925   518602 | sdka  08:5A   3G   10925   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k0_085b | sdbg  08:5B   4G   10925   518602 | sdkb  08:5B   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085c | sdbi  08:5C   4G   10925   518602 | sdkc  08:5C   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085d | sdbk  08:5D   4G   10925   518602 | sdkd  08:5D   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085e | sdbm  08:5E   4G   10925   518602 | sdke  08:5E   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_085f | sdbo  08:5F   4G   10925   518602 | sdkf  08:5F   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0860 | sdbq  08:60   4G   10925   518602 | sdkg  08:60   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0861 | sdbr  08:61   4G   10925   518602 | sdkh  08:61   3G   10925   518602 | dgilaidwhd2idb
+hitachi_vspg1k0_0862 | sdbs  08:62   4G   10925   230490 | sdki  08:62   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0863 | sdca  08:63   4G   10925   230490 | sdkj  08:63   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0864 | sdcc  08:64   4G   10925   230490 | sdkk  08:64   3G   10925   230490 | dgilaidwhd2idb
+hitachi_vspg1k0_0865 | sdcd  08:65   4G   10925   230490 | sdkl  08:65   3G   10925   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k0_0866 | sdce  08:66   4G   10925    14405 | sdkm  08:66   3G   10925    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k0_0867 | sdcf  08:67   4G   10925    14405 | sdkn  08:67   3G   10925    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k0_0916 | sdg   09:16   4G   10925  2097152 | sdhm  09:16   3G   10925  2097152 | dgtldbviewtdb
+hitachi_vspg1k0_0917 | sdf   09:17   4G   10925   518602 | sdhl  09:17   3G   10925   518602 | dgtldbviewtbkup
+hitachi_vspg1k0_0918 | sdj   09:18   4G   10925    57622 | sdht  09:18   3G   10925    57622 | dgtldbviewtredo1
+hitachi_vspg1k0_0919 | sdk   09:19   4G   10925    57622 | sdhv  09:19   3G   10925    57622 | dgtldbviewtredo2
+hitachi_vspg1k0_093d | sdcg  09:3D   4G   10925  4194304 | sdko  09:3D   3G   10925  4194304 | dgtldbahutdb
+hitachi_vspg1k0_093e | sdch  09:3E   4G   10925   518602 | sdkp  09:3E   3G   10925   518602 | dgtldbahutdb
+hitachi_vspg1k0_093f | sdci  09:3F   4G   10925    57622 | sdkq  09:3F   3G   10925    57622 | dgtldbahutredo1
+hitachi_vspg1k0_0940 | sdcj  09:40   4G   10925    57622 | sdkr  09:40   3G   10925    57622 | dgtldbahutredo2
+hitachi_vspg1k0_0943 | sdck  09:43   4G   10925  2097152 | sdks  09:43   3G   10925  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k0_0944 | sdcm  09:44   4G   10925   518602 | sdkt  09:44   3G   10925   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k0_0945 | sdcp  09:45   4G   10925    57622 | sdku  09:45   3G   10925    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k0_0946 | sdcr  09:46   4G   10925    57622 | sdkv  09:46   3G   10925    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k0_094a | sdu   09:4A   4G   10925   518602 | sdip  09:4A   3G   10925   518602 | dgtldbahutbkup
+hitachi_vspg1k1_0010 | sdgz  00:10   3G   10930   518602 | sdir  00:10   4G   10930   518602 | dgtldbviewtdb
+hitachi_vspg1k1_0011 | sddb  00:11   3G   10930  2097152 | sdej  00:11   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_002c | sdlh  00:2C   3G   10930  1048576 | sdlg  00:2C   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_003b | sdde  00:3B   3G   10930   230490 | sdek  00:3B   4G   10930   230490 | dgtldbviewtbkup
+hitachi_vspg1k1_0059 | sddo  00:59   3G   10930   518602 | sdet  00:59   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_00d7 | sddr  00:D7   3G   10930   518602 | sdeu  00:D7   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_00e2 | sddu  00:E2   3G   10930   518602 | sdew  00:E2   4G   10930   518602 |
+hitachi_vspg1k1_0107 | sddz  01:07   3G   10930  1048576 | sdfb  01:07   4G   10930  1048576 | dgtlaidwhdtdb
+hitachi_vspg1k1_010f | sddy  01:0F   3G   10930   518602 | sdez  01:0F   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_012a | sdbd  01:2A   3G   10930  1048576 | sdcu  01:2A   4G   10930  1048576 |
+hitachi_vspg1k1_012b | sdbp  01:2B   3G   10930      900 | sddf  01:2B   4G   10930      900 |
+hitachi_vspg1k1_012c | sdbt  01:2C   3G   10930      900 | sddh  01:2C   4G   10930      900 |
+hitachi_vspg1k1_012d | sdbf  01:2D   3G   10930  1048576 | sdcv  01:2D   4G   10930  1048576 |
+hitachi_vspg1k1_012e | sdbh  01:2E   3G   10930   518602 | sdcw  01:2E   4G   10930   518602 |
+hitachi_vspg1k1_0130 | sdbx  01:30   3G   10930   518602 | sddn  01:30   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0131 | sdby  01:31   3G   10930   518602 | sddp  01:31   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0132 | sdbz  01:32   3G   10930   518602 | sddq  01:32   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0133 | sdcb  01:33   3G   10930   518602 | sdds  01:33   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0134 | sdcl  01:34   3G   10930   518602 | sddt  01:34   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0135 | sdcn  01:35   3G   10930   518602 | sddv  01:35   4G   10930   518602 | dgtldbalphatdb
+hitachi_vspg1k1_0136 | sdco  01:36   3G   10930   518602 | sddw  01:36   4G   10930   518602 | dgtldbalphatbkup
+hitachi_vspg1k1_013e | sddg  01:3E   3G   10930    14405 | sdem  01:3E   4G   10930    14405 | dgtldbalphatredo1
+hitachi_vspg1k1_013f | sddk  01:3F   3G   10930    14405 | sdeo  01:3F   4G   10930    14405 | dgtldbalphatredo2
+hitachi_vspg1k1_0140 | sddm  01:40   3G   10930   230490 | sder  01:40   4G   10930   230490 | dgoracle
+hitachi_vspg1k1_0172 | sdbw  01:72   3G   10930  1048576 | sddl  01:72   4G   10930  1048576 |
+hitachi_vspg1k1_0179 | sdcq  01:79   3G   10930  1048576 | sddx  01:79   4G   10930  1048576 |
+hitachi_vspg1k1_01d6 | sdbj  01:D6   3G   10930   518602 | sdcy  01:D6   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_02b9 | sdlb  02:B9   3G   10930  1048576 | sdkz  02:B9   4G   10930  1048576 | dgildbviewibkup
+hitachi_vspg1k1_02c9 | sdlc  02:C9   3G   10930  1048576 | sdla  02:C9   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0319 | sdcx  03:19   3G   10930   518602 | sdec  03:19   4G   10930   518602 | dgildbdahuibkup
+hitachi_vspg1k1_0322 | sdep  03:22   3G   10930   230490 | sdga  03:22   4G   10930   230490 | dgildbdahuibkup
+hitachi_vspg1k1_0323 | sdef  03:23   3G   10930   518602 | sdfi  03:23   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0324 | sdeh  03:24   3G   10930   518602 | sdfk  03:24   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0325 | sdei  03:25   3G   10930   518602 | sdfm  03:25   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0326 | sdel  03:26   3G   10930   518602 | sdfo  03:26   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0327 | sden  03:27   3G   10930   518602 | sdfq  03:27   4G   10930   518602 | dgildbdahuidb
+hitachi_vspg1k1_0328 | sdeb  03:28   3G   10930    14405 | sdfe  03:28   4G   10930    14405 | dgildbdahuiredo1
+hitachi_vspg1k1_0329 | sded  03:29   3G   10930    14405 | sdfg  03:29   4G   10930    14405 | dgildbdahuiredo2
+hitachi_vspg1k1_03fb | sdeq  03:FB   3G   10930  1048576 | sdgc  03:FB   4G   10930  1048576 | dgildbdahuidb
+hitachi_vspg1k1_04a9 | sdcz  04:A9   3G   10930   230490 | sdee  04:A9   4G   10930   230490 | dgildbviewidb
+hitachi_vspg1k1_04aa | sdda  04:AA   3G   10930  1048576 | sdeg  04:AA   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_084e | sdes  08:4E   3G   10930    14405 | sdge  08:4E   4G   10930    14405 |
+hitachi_vspg1k1_084f | sdev  08:4F   3G   10930    14405 | sdgg  08:4F   4G   10930    14405 | dgildbviewiredo2
+hitachi_vspg1k1_0850 | sdex  08:50   3G   10930    14405 | sdgi  08:50   4G   10930    14405 | dgildbviewiredo1
+hitachi_vspg1k1_0851 | sdey  08:51   3G   10930    14405 | sdgj  08:51   4G   10930    14405 |
+hitachi_vspg1k1_0852 | sdfa  08:52   3G   10930  1048576 | sdgl  08:52   4G   10930  1048576 | dgildbviewidb
+hitachi_vspg1k1_0853 | sdfc  08:53   3G   10930  1048576 | sdgn  08:53   4G   10930  1048576 |
+hitachi_vspg1k1_0854 | sdfd  08:54   3G   10930   518602 | sdgp  08:54   4G   10930   518602 |
+hitachi_vspg1k1_0855 | sdff  08:55   3G   10930   518602 | sdgq  08:55   4G   10930   518602 |
+hitachi_vspg1k1_0856 | sdfh  08:56   3G   10930   518602 | sdgr  08:56   4G   10930   518602 | dgildbviewibkup
+hitachi_vspg1k1_0857 | sdfj  08:57   3G   10930   518602 | sdgu  08:57   4G   10930   518602 | dgildbviewidb
+hitachi_vspg1k1_0858 | sdfl  08:58   3G   10930   230490 | sdgw  08:58   4G   10930   230490 |
+hitachi_vspg1k1_0859 | sdfn  08:59   3G   10930   230490 | sdha  08:59   4G   10930   230490 | dgildbviewibkup
+hitachi_vspg1k1_085a | sdfp  08:5A   3G   10930   518602 | sdhb  08:5A   4G   10930   518602 | dgilaidwhd2ibkup
+hitachi_vspg1k1_085b | sdfr  08:5B   3G   10930   518602 | sdhd  08:5B   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085c | sdfs  08:5C   3G   10930   518602 | sdhe  08:5C   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085d | sdft  08:5D   3G   10930   518602 | sdhh  08:5D   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085e | sdfu  08:5E   3G   10930   518602 | sdhj  08:5E   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_085f | sdfv  08:5F   3G   10930   518602 | sdhk  08:5F   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0860 | sdfw  08:60   3G   10930   518602 | sdhn  08:60   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0861 | sdfx  08:61   3G   10930   518602 | sdho  08:61   4G   10930   518602 | dgilaidwhd2idb
+hitachi_vspg1k1_0862 | sdfy  08:62   3G   10930   230490 | sdhq  08:62   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0863 | sdfz  08:63   3G   10930   230490 | sdhs  08:63   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0864 | sdgb  08:64   3G   10930   230490 | sdhu  08:64   4G   10930   230490 | dgilaidwhd2idb
+hitachi_vspg1k1_0865 | sdgd  08:65   3G   10930   230490 | sdhw  08:65   4G   10930   230490 | dgilaidwhd2ibkup
+hitachi_vspg1k1_0866 | sdgf  08:66   3G   10930    14405 | sdhx  08:66   4G   10930    14405 | dgilaidwhd2iredo1
+hitachi_vspg1k1_0867 | sdgh  08:67   3G   10930    14405 | sdia  08:67   4G   10930    14405 | dgilaidwhd2iredo2
+hitachi_vspg1k1_0916 | sdbn  09:16   3G   10930  2097152 | sddd  09:16   4G   10930  2097152 | dgtldbviewtdb
+hitachi_vspg1k1_0917 | sdbl  09:17   3G   10930   518602 | sddc  09:17   4G   10930   518602 | dgtldbviewtbkup
+hitachi_vspg1k1_0918 | sdbu  09:18   3G   10930    57622 | sddi  09:18   4G   10930    57622 | dgtldbviewtredo1
+hitachi_vspg1k1_0919 | sdbv  09:19   3G   10930    57622 | sddj  09:19   4G   10930    57622 | dgtldbviewtredo2
+hitachi_vspg1k1_093d | sdgk  09:3D   3G   10930  4194304 | sdic  09:3D   4G   10930  4194304 | dgtldbahutdb
+hitachi_vspg1k1_093e | sdgm  09:3E   3G   10930   518602 | sdif  09:3E   4G   10930   518602 | dgtldbahutdb
+hitachi_vspg1k1_093f | sdgo  09:3F   3G   10930    57622 | sdih  09:3F   4G   10930    57622 | dgtldbahutredo1
+hitachi_vspg1k1_0940 | sdgs  09:40   3G   10930    57622 | sdik  09:40   4G   10930    57622 | dgtldbahutredo2
+hitachi_vspg1k1_0943 | sdgt  09:43   3G   10930  2097152 | sdil  09:43   4G   10930  2097152 | dgtlaidwhdtdb
+hitachi_vspg1k1_0944 | sdgv  09:44   3G   10930   518602 | sdin  09:44   4G   10930   518602 | dgtlaidwhdtbkup
+hitachi_vspg1k1_0945 | sdgx  09:45   3G   10930    57622 | sdio  09:45   4G   10930    57622 | dgtlaidwhdtredo1
+hitachi_vspg1k1_0946 | sdgy  09:46   3G   10930    57622 | sdiq  09:46   4G   10930    57622 | dgtlaidwhdtredo2
+hitachi_vspg1k1_094a | sdct  09:4A   3G   10930   518602 | sdea  09:4A   4G   10930   518602 | dgtldbahutbkup
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # san_info -s
+Host15 (Emulex LPe31002-M6-D FV12.8.522.11 DV12.0.0.10. HN:lpdbaibir1. OS:Linux):
+  Board mode: online
+  WWN: 0x100000109b3c192f
+  State: Linkdown (Unknown) @ unknown
+  Raw level:
+    Array-Ports seen:   0 Online;
+    Disks seen:         0
+
+  Veritas:
+    Enclosures seen: 0
+Host16 (Emulex LPe31002-M6-D FV12.8.522.11 DV12.0.0.10. HN:lpdbaibir1. OS:Linux):
+  Board mode: online
+  WWN: 0x100000109b3c1930
+  State: Online (NPort (fabric via point-to-point)) @ 16 Gbit
+  Raw level:
+    Array-Ports seen:   2 Online;
+                                0x50060e80072aad36 (VSP-G1x00 10925 4G @ GS-III) - 80 disks
+                                0x50060e80072ab236 (VSP-G1x00 10930 4G @ GS-III) - 80 disks
+    Disks seen:         160
+
+  Veritas:
+    Enclosures seen: 2
+Host17 (Emulex LPe31002-M6-D FV12.8.522.11 DV12.0.0.10. HN:lpdbaibir1. OS:Linux):
+  Board mode: online
+  WWN: 0x100000109b3c1b06
+  State: Linkdown (Unknown) @ unknown
+  Raw level:
+    Array-Ports seen:   0 Online;
+    Disks seen:         0
+
+  Veritas:
+    Enclosures seen: 0
+Host18 (Emulex LPe31002-M6-D FV12.8.522.11 DV12.0.0.10. HN:lpdbaibir1. OS:Linux):
+  Board mode: online
+  WWN: 0x100000109b3c1b07
+  State: Online (NPort (fabric via point-to-point)) @ 16 Gbit
+  Raw level:
+    Array-Ports seen:   2 Online;
+                                0x50060e80072aad26 (VSP-G1x00 10925 3G @ GS-III) - 80 disks
+                                0x50060e80072ab226 (VSP-G1x00 10930 3G @ GS-III) - 80 disks
+    Disks seen:         160
+
+  Veritas:
+    Enclosures seen: 2
+lpdbaibir1:/var/tmp # vxprint -htq
+Disk group: dgtlaidwhdtredo2
+
+dg dgtlaidwhdtredo2 default  default  8000     1584523311.956.lpdbaibir1
+
+dm 18_10930_0946 hitachi_vspg1k1_0946 auto 65536 117940560 -
+dm 19_10925_0946 hitachi_vspg1k0_0946 auto 65536 117940560 -
+
+v  lvredo2      -            ENABLED  ACTIVE   117913600 PREFER   lvredo2-10930 fsgen
+pl lvredo2-10925 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_0946-01 lvredo2-10925 19_10925_0946 0 117913600 0     hitachi_vspg1k0_0946 ENA
+pl lvredo2-10930 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_0946-01 lvredo2-10930 18_10930_0946 0 117913600 0     hitachi_vspg1k1_0946 ENA
+pl lvredo2_drl-10925 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0946-03 lvredo2_drl-10925 19_10925_0946 117915712 2112 LOG hitachi_vspg1k0_0946 ENA
+pl lvredo2_drl-10930 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0946-03 lvredo2_drl-10930 18_10930_0946 117915712 2112 LOG hitachi_vspg1k1_0946 ENA
+dc lvredo2_dco  lvredo2      lvredo2_dcl
+v  lvredo2_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo2_dcl-10925 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_0946-02 lvredo2_dcl-10925 19_10925_0946 117913600 2112 0 hitachi_vspg1k0_0946 ENA
+pl lvredo2_dcl-10930 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_0946-02 lvredo2_dcl-10930 18_10930_0946 117913600 2112 0 hitachi_vspg1k1_0946 ENA
+
+Disk group: dgoracle
+
+dg dgoracle     default      default  11000    1534493924.192.lpdbaibir1
+
+dm 18_10930_0140 hitachi_vspg1k1_0140 auto 65536 471961632 -
+dm 19_10925_0140 hitachi_vspg1k0_0140 auto 65536 471961632 -
+
+v  lvoracle     -            ENABLED  ACTIVE   367001600 PREFER   lvoracle-10930 fsgen
+pl lvoracle-10925 lvoracle   ENABLED  ACTIVE   367001600 CONCAT   -        RW
+sd 19_10925_0140-01 lvoracle-10925 19_10925_0140 0 367001600 0    hitachi_vspg1k0_0140 ENA
+pl lvoracle-10930 lvoracle   ENABLED  ACTIVE   367001600 CONCAT   -        RW
+sd 18_10930_0140-01 lvoracle-10930 18_10930_0140 0 367001600 0    hitachi_vspg1k1_0140 ENA
+pl lvoracle_drl-10925 lvoracle ENABLED ACTIVE  LOGONLY  CONCAT    -        RW
+sd 19_10925_0140-03 lvoracle_drl-10925 19_10925_0140 367003712 2112 LOG hitachi_vspg1k0_0140 ENA
+pl lvoracle_drl-10930 lvoracle ENABLED ACTIVE  LOGONLY  CONCAT    -        RW
+sd 18_10930_0140-03 lvoracle_drl-10930 18_10930_0140 367003712 2112 LOG hitachi_vspg1k1_0140 ENA
+dc lvoracle_dco lvoracle     lvoracle_dcl
+v  lvoracle_dcl -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvoracle_dcl-10925 lvoracle_dcl ENABLED ACTIVE 2112  CONCAT    -        RW
+sd 19_10925_0140-02 lvoracle_dcl-10925 19_10925_0140 367001600 2112 0 hitachi_vspg1k0_0140 ENA
+pl lvoracle_dcl-10930 lvoracle_dcl ENABLED ACTIVE 2112  CONCAT    -        RW
+sd 18_10930_0140-02 lvoracle_dcl-10930 18_10930_0140 367001600 2112 0 hitachi_vspg1k1_0140 ENA
+
+v  lvoracleaudit -           ENABLED  ACTIVE   104857600 PREFER   lvoracleaudit-10930 fsgen
+pl lvoracleaudit-10925 lvoracleaudit ENABLED ACTIVE 104857600 CONCAT -     RW
+sd 19_10925_0140-04 lvoracleaudit-10925 19_10925_0140 367005824 104857600 0 hitachi_vspg1k0_0140 ENA
+pl lvoracleaudit-10930 lvoracleaudit ENABLED ACTIVE 104857600 CONCAT -     RW
+sd 18_10930_0140-04 lvoracleaudit-10930 18_10930_0140 367005824 104857600 0 hitachi_vspg1k1_0140 ENA
+pl lvoracleaudit_drl-10925 lvoracleaudit ENABLED ACTIVE LOGONLY CONCAT -   RW
+sd 19_10925_0140-06 lvoracleaudit_drl-10925 19_10925_0140 471865536 2112 LOG hitachi_vspg1k0_0140 ENA
+pl lvoracleaudit_drl-10930 lvoracleaudit ENABLED ACTIVE LOGONLY CONCAT -   RW
+sd 18_10930_0140-06 lvoracleaudit_drl-10930 18_10930_0140 471865536 2112 LOG hitachi_vspg1k1_0140 ENA
+dc lvoracleaudit_dco lvoracleaudit lvoracleaudit_dcl
+v  lvoracleaudit_dcl -       ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvoracleaudit_dcl-10925 lvoracleaudit_dcl ENABLED ACTIVE 2112 CONCAT -  RW
+sd 19_10925_0140-05 lvoracleaudit_dcl-10925 19_10925_0140 471863424 2112 0 hitachi_vspg1k0_0140 ENA
+pl lvoracleaudit_dcl-10930 lvoracleaudit_dcl ENABLED ACTIVE 2112 CONCAT -  RW
+sd 18_10930_0140-05 lvoracleaudit_dcl-10930 18_10930_0140 471863424 2112 0 hitachi_vspg1k1_0140 ENA
+
+Disk group: dgtlaidwhdtbkup
+
+dg dgtlaidwhdtbkup default   default  29000    1584523287.944.lpdbaibir1
+
+dm 18_10930_00d7 hitachi_vspg1k1_00d7 auto 65536 1061995824 -
+dm 18_10930_010f hitachi_vspg1k1_010f auto 65536 1061995824 -
+dm 18_10930_0944 hitachi_vspg1k1_0944 auto 65536 1061995824 -
+dm 19_10925_00d7 hitachi_vspg1k0_00d7 auto 65536 1061995824 -
+dm 19_10925_010f hitachi_vspg1k0_010f auto 65536 1061995824 -
+dm 19_10925_0944 hitachi_vspg1k0_0944 auto 65536 1061995824 -
+
+v  lvbkup       -            ENABLED  ACTIVE   3185954816 PREFER  lvbkup-10930 fsgen
+pl lvbkup-01    lvbkup       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_010f-02 lvbkup-01 18_10930_010f 1061991120 2112 LOG   hitachi_vspg1k1_010f ENA
+pl lvbkup-02    lvbkup       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_010f-02 lvbkup-02 19_10925_010f 1061991120 2112 LOG   hitachi_vspg1k0_010f ENA
+pl lvbkup-10925 lvbkup       ENABLED  ACTIVE   3185954816 CONCAT  -        RW
+sd 19_10925_0944-01 lvbkup-10925 19_10925_0944 0 1061967872 0     hitachi_vspg1k0_0944 ENA
+sd 19_10925_00d7-01 lvbkup-10925 19_10925_00d7 0 1061995824 1061967872 hitachi_vspg1k0_00d7 ENA
+sd 19_10925_010f-01 lvbkup-10925 19_10925_010f 0 1061991120 2123963696 hitachi_vspg1k0_010f ENA
+pl lvbkup-10930 lvbkup       ENABLED  ACTIVE   3185954816 CONCAT  -        RW
+sd 18_10930_0944-01 lvbkup-10930 18_10930_0944 0 1061967872 0     hitachi_vspg1k1_0944 ENA
+sd 18_10930_00d7-01 lvbkup-10930 18_10930_00d7 0 1061995824 1061967872 hitachi_vspg1k1_00d7 ENA
+sd 18_10930_010f-01 lvbkup-10930 18_10930_010f 0 1061991120 2123963696 hitachi_vspg1k1_010f ENA
+dc lvbkup_dco   lvbkup       lvbkup_dcl
+v  lvbkup_dcl   -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvbkup_dcl-10925 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 19_10925_0944-02 lvbkup_dcl-10925 19_10925_0944 1061967872 2112 0 hitachi_vspg1k0_0944 ENA
+pl lvbkup_dcl-10930 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 18_10930_0944-02 lvbkup_dcl-10930 18_10930_0944 1061967872 2112 0 hitachi_vspg1k1_0944 ENA
+
+Disk group: dgtlaidwhdtdb
+
+dg dgtlaidwhdtdb default     default  23000    1584523296.948.lpdbaibir1
+
+dm 18_10930_0107 hitachi_vspg1k1_0107 auto 65536 2147417808 -
+dm 18_10930_0943 hitachi_vspg1k1_0943 auto 65536 4294901456 -
+dm 19_10925_0107 hitachi_vspg1k0_0107 auto 65536 2147417808 -
+dm 19_10925_0943 hitachi_vspg1k0_0943 auto 65536 4294901456 -
+
+v  lvdb         -            ENABLED  ACTIVE   6442287104 PREFER  lvdb-10930 fsgen
+pl lvdb-10925   lvdb         ENABLED  ACTIVE   6442287104 CONCAT  -        RW
+sd 19_10925_0943-01 lvdb-10925 19_10925_0943 0 4294873088 0       hitachi_vspg1k0_0943 ENA
+sd 19_10925_0107-01 lvdb-10925 19_10925_0107 0 2147414016 4294873088 hitachi_vspg1k0_0107 ENA
+pl lvdb-10930   lvdb         ENABLED  ACTIVE   6442287104 CONCAT  -        RW
+sd 18_10930_0943-01 lvdb-10930 18_10930_0943 0 4294873088 0       hitachi_vspg1k1_0943 ENA
+sd 18_10930_0107-01 lvdb-10930 18_10930_0107 0 2147414016 4294873088 hitachi_vspg1k1_0107 ENA
+pl lvdb_drl-10925 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0943-03 lvdb_drl-10925 19_10925_0943 4294875200 2112 LOG hitachi_vspg1k0_0943 ENA
+pl lvdb_drl-10930 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0943-03 lvdb_drl-10930 18_10930_0943 4294875200 2112 LOG hitachi_vspg1k1_0943 ENA
+dc lvdb_dco     lvdb         lvdb_dcl
+v  lvdb_dcl     -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvdb_dcl-10925 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 19_10925_0943-02 lvdb_dcl-10925 19_10925_0943 4294873088 2112 0 hitachi_vspg1k0_0943 ENA
+pl lvdb_dcl-10930 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 18_10930_0943-02 lvdb_dcl-10930 18_10930_0943 4294873088 2112 0 hitachi_vspg1k1_0943 ENA
+
+Disk group: dgtlaidwhdtredo1
+
+dg dgtlaidwhdtredo1 default  default  25000    1584523303.952.lpdbaibir1
+
+dm 18_10930_0945 hitachi_vspg1k1_0945 auto 65536 117940560 -
+dm 19_10925_0945 hitachi_vspg1k0_0945 auto 65536 117940560 -
+
+v  lvredo1      -            ENABLED  ACTIVE   117913600 PREFER   lvredo1-10930 fsgen
+pl lvredo1-10925 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_0945-01 lvredo1-10925 19_10925_0945 0 117913600 0     hitachi_vspg1k0_0945 ENA
+pl lvredo1-10930 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_0945-01 lvredo1-10930 18_10930_0945 0 117913600 0     hitachi_vspg1k1_0945 ENA
+pl lvredo1_drl-10925 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0945-03 lvredo1_drl-10925 19_10925_0945 117915712 2112 LOG hitachi_vspg1k0_0945 ENA
+pl lvredo1_drl-10930 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0945-03 lvredo1_drl-10930 18_10930_0945 117915712 2112 LOG hitachi_vspg1k1_0945 ENA
+dc lvredo1_dco  lvredo1      lvredo1_dcl
+v  lvredo1_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo1_dcl-10925 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_0945-02 lvredo1_dcl-10925 19_10925_0945 117913600 2112 0 hitachi_vspg1k0_0945 ENA
+pl lvredo1_dcl-10930 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_0945-02 lvredo1_dcl-10930 18_10930_0945 117913600 2112 0 hitachi_vspg1k1_0945 ENA
+
+Disk group: dgtldbahutbkup
+
+dg dgtldbahutbkup default    default  30000    1584617167.972.lpdbaibir1
+
+dm 18_10930_094a hitachi_vspg1k1_094a auto 65536 1061995824 -
+dm 19_10925_094a hitachi_vspg1k0_094a auto 65536 1061995824 -
+
+v  lvbkup       -            ENABLED  ACTIVE   1061967872 PREFER  lvbkup-10930 fsgen
+pl lvbkup-10925 lvbkup       ENABLED  ACTIVE   1061967872 CONCAT  -        RW
+sd 19_10925_094a-01 lvbkup-10925 19_10925_094a 0 1061967872 0     hitachi_vspg1k0_094a ENA
+pl lvbkup-10930 lvbkup       ENABLED  ACTIVE   1061967872 CONCAT  -        RW
+sd 18_10930_094a-01 lvbkup-10930 18_10930_094a 0 1061967872 0     hitachi_vspg1k1_094a ENA
+pl lvbkup_drl-10925 lvbkup   ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_094a-03 lvbkup_drl-10925 19_10925_094a 1061969984 2112 LOG hitachi_vspg1k0_094a ENA
+pl lvbkup_drl-10930 lvbkup   ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_094a-03 lvbkup_drl-10930 18_10930_094a 1061969984 2112 LOG hitachi_vspg1k1_094a ENA
+dc lvbkup_dco   lvbkup       lvbkup_dcl
+v  lvbkup_dcl   -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvbkup_dcl-10925 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 19_10925_094a-02 lvbkup_dcl-10925 19_10925_094a 1061967872 2112 0 hitachi_vspg1k0_094a ENA
+pl lvbkup_dcl-10930 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 18_10930_094a-02 lvbkup_dcl-10930 18_10930_094a 1061967872 2112 0 hitachi_vspg1k1_094a ENA
+
+Disk group: dgtldbahutdb
+
+dg dgtldbahutdb default      default  27000    1584617183.982.lpdbaibir1
+
+dm 18_10930_093d hitachi_vspg1k1_093d auto 65536 8589868752 -
+dm 18_10930_093e hitachi_vspg1k1_093e auto 65536 1061995824 -
+dm 19_10925_093d hitachi_vspg1k0_093d auto 65536 8589868752 -
+dm 19_10925_093e hitachi_vspg1k0_093e auto 65536 1061995824 -
+
+v  lvdb         -            ENABLED  ACTIVE   9651836928 PREFER  lvdb-10930 fsgen
+pl lvdb-10925   lvdb         ENABLED  ACTIVE   9651836928 CONCAT  -        RW
+sd 19_10925_093d-01 lvdb-10925 19_10925_093d 0 8589868752 0       hitachi_vspg1k0_093d ENA
+sd 19_10925_093e-01 lvdb-10925 19_10925_093e 0 1061968176 8589868752 hitachi_vspg1k0_093e ENA
+pl lvdb-10930   lvdb         ENABLED  ACTIVE   9651836928 CONCAT  -        RW
+sd 18_10930_093d-01 lvdb-10930 18_10930_093d 0 8589868752 0       hitachi_vspg1k1_093d ENA
+sd 18_10930_093e-01 lvdb-10930 18_10930_093e 0 1061968176 8589868752 hitachi_vspg1k1_093e ENA
+pl lvdb_drl-10925 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_093e-03 lvdb_drl-10925 19_10925_093e 1061970288 2112 LOG hitachi_vspg1k0_093e ENA
+pl lvdb_drl-10930 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_093e-03 lvdb_drl-10930 18_10930_093e 1061970288 2112 LOG hitachi_vspg1k1_093e ENA
+dc lvdb_dco     lvdb         lvdb_dcl
+v  lvdb_dcl     -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvdb_dcl-10925 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 19_10925_093e-02 lvdb_dcl-10925 19_10925_093e 1061968176 2112 0 hitachi_vspg1k0_093e ENA
+pl lvdb_dcl-10930 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 18_10930_093e-02 lvdb_dcl-10930 18_10930_093e 1061968176 2112 0 hitachi_vspg1k1_093e ENA
+
+Disk group: dgtldbahutredo1
+
+dg dgtldbahutredo1 default   default  2000     1584617191.988.lpdbaibir1
+
+dm 18_10930_093f hitachi_vspg1k1_093f auto 65536 117940560 -
+dm 19_10925_093f hitachi_vspg1k0_093f auto 65536 117940560 -
+
+v  lvredo1      -            ENABLED  ACTIVE   117913600 PREFER   lvredo1-10930 fsgen
+pl lvredo1-10925 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_093f-01 lvredo1-10925 19_10925_093f 0 117913600 0     hitachi_vspg1k0_093f ENA
+pl lvredo1-10930 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_093f-01 lvredo1-10930 18_10930_093f 0 117913600 0     hitachi_vspg1k1_093f ENA
+pl lvredo1_drl-10925 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_093f-03 lvredo1_drl-10925 19_10925_093f 117915712 2112 LOG hitachi_vspg1k0_093f ENA
+pl lvredo1_drl-10930 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_093f-03 lvredo1_drl-10930 18_10930_093f 117915712 2112 LOG hitachi_vspg1k1_093f ENA
+dc lvredo1_dco  lvredo1      lvredo1_dcl
+v  lvredo1_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo1_dcl-10925 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_093f-02 lvredo1_dcl-10925 19_10925_093f 117913600 2112 0 hitachi_vspg1k0_093f ENA
+pl lvredo1_dcl-10930 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_093f-02 lvredo1_dcl-10930 18_10930_093f 117913600 2112 0 hitachi_vspg1k1_093f ENA
+
+Disk group: dgtldbahutredo2
+
+dg dgtldbahutredo2 default   default  3000     1584617198.994.lpdbaibir1
+
+dm 18_10930_0940 hitachi_vspg1k1_0940 auto 65536 117940560 -
+dm 19_10925_0940 hitachi_vspg1k0_0940 auto 65536 117940560 -
+
+v  lvredo2      -            ENABLED  ACTIVE   117913600 PREFER   lvredo2-10930 fsgen
+pl lvredo2-10925 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_0940-01 lvredo2-10925 19_10925_0940 0 117913600 0     hitachi_vspg1k0_0940 ENA
+pl lvredo2-10930 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_0940-01 lvredo2-10930 18_10930_0940 0 117913600 0     hitachi_vspg1k1_0940 ENA
+pl lvredo2_drl-10925 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0940-03 lvredo2_drl-10925 19_10925_0940 117915712 2112 LOG hitachi_vspg1k0_0940 ENA
+pl lvredo2_drl-10930 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0940-03 lvredo2_drl-10930 18_10930_0940 117915712 2112 LOG hitachi_vspg1k1_0940 ENA
+dc lvredo2_dco  lvredo2      lvredo2_dcl
+v  lvredo2_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo2_dcl-10925 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_0940-02 lvredo2_dcl-10925 19_10925_0940 117913600 2112 0 hitachi_vspg1k0_0940 ENA
+pl lvredo2_dcl-10930 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_0940-02 lvredo2_dcl-10930 18_10930_0940 117913600 2112 0 hitachi_vspg1k1_0940 ENA
+
+Disk group: dgtldbviewtbkup
+
+dg dgtldbviewtbkup default   default  17000    1584126820.868.lpdbaibir1
+
+dm 18_10930_003b hitachi_vspg1k1_003b auto 65536 471961632 -
+dm 18_10930_0917 hitachi_vspg1k1_0917 auto 65536 1061995824 -
+dm 19_10925_003b hitachi_vspg1k0_003b auto 65536 471961632 -
+dm 19_10925_0917 hitachi_vspg1k0_0917 auto 65536 1061995824 -
+
+v  lvbkup       -            ENABLED  ACTIVE   1531729920 PREFER  lvbkup-10930 fsgen
+pl lvbkup-10925 lvbkup       ENABLED  ACTIVE   1531729920 CONCAT  -        RW
+sd 19_10925_0917-01 lvbkup-10925 19_10925_0917 0 1061967872 0     hitachi_vspg1k0_0917 ENA
+sd 19_10925_003b-01 lvbkup-10925 19_10925_003b 0 469762048 1061967872 hitachi_vspg1k0_003b ENA
+pl lvbkup-10930 lvbkup       ENABLED  ACTIVE   1531729920 CONCAT  -        RW
+sd 18_10930_0917-01 lvbkup-10930 18_10930_0917 0 1061967872 0     hitachi_vspg1k1_0917 ENA
+sd 18_10930_003b-01 lvbkup-10930 18_10930_003b 0 469762048 1061967872 hitachi_vspg1k1_003b ENA
+pl lvbkup_drl-10925 lvbkup   ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0917-03 lvbkup_drl-10925 19_10925_0917 1061969984 2112 LOG hitachi_vspg1k0_0917 ENA
+pl lvbkup_drl-10930 lvbkup   ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0917-03 lvbkup_drl-10930 18_10930_0917 1061969984 2112 LOG hitachi_vspg1k1_0917 ENA
+dc lvbkup_dco   lvbkup       lvbkup_dcl
+v  lvbkup_dcl   -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvbkup_dcl-10925 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 19_10925_0917-02 lvbkup_dcl-10925 19_10925_0917 1061967872 2112 0 hitachi_vspg1k0_0917 ENA
+pl lvbkup_dcl-10930 lvbkup_dcl ENABLED ACTIVE  2112     CONCAT    -        RW
+sd 18_10930_0917-02 lvbkup_dcl-10930 18_10930_0917 1061967872 2112 0 hitachi_vspg1k1_0917 ENA
+
+Disk group: dgtldbviewtdb
+
+dg dgtldbviewtdb default     default  28000    1584126833.874.lpdbaibir1
+
+dm 18_10930_0010 hitachi_vspg1k1_0010 auto 65536 1061995824 -
+dm 18_10930_0011 hitachi_vspg1k1_0011 auto 65536 4294901456 -
+dm 18_10930_0916 hitachi_vspg1k1_0916 auto 65536 4294901456 -
+dm 19_10925_0010 hitachi_vspg1k0_0010 auto 65536 1061995824 -
+dm 19_10925_0011 hitachi_vspg1k0_0011 auto 65536 4294901456 -
+dm 19_10925_0916 hitachi_vspg1k0_0916 auto 65536 4294901456 -
+
+v  lvdb         -            ENABLED  ACTIVE   9651789824 PREFER  lvdb-10930 fsgen
+pl lvdb-10925   lvdb         ENABLED  ACTIVE   9651789824 CONCAT  -        RW
+sd 19_10925_0916-01 lvdb-10925 19_10925_0916 0 4294873088 0       hitachi_vspg1k0_0916 ENA
+sd 19_10925_0010-01 lvdb-10925 19_10925_0010 0 1061995824 4294873088 hitachi_vspg1k0_0010 ENA
+sd 19_10925_0011-01 lvdb-10925 19_10925_0011 0 4294901456 5356868912 hitachi_vspg1k0_0011 ENA
+sd 19_10925_0916-04 lvdb-10925 19_10925_0916 4294877312 19456 9651770368 hitachi_vspg1k0_0916 ENA
+pl lvdb-10930   lvdb         ENABLED  ACTIVE   9651789824 CONCAT  -        RW
+sd 18_10930_0916-01 lvdb-10930 18_10930_0916 0 4294873088 0       hitachi_vspg1k1_0916 ENA
+sd 18_10930_0010-01 lvdb-10930 18_10930_0010 0 1061995824 4294873088 hitachi_vspg1k1_0010 ENA
+sd 18_10930_0011-01 lvdb-10930 18_10930_0011 0 4294901456 5356868912 hitachi_vspg1k1_0011 ENA
+sd 18_10930_0916-04 lvdb-10930 18_10930_0916 4294877312 19456 9651770368 hitachi_vspg1k1_0916 ENA
+pl lvdb_drl-10925 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0916-03 lvdb_drl-10925 19_10925_0916 4294875200 2112 LOG hitachi_vspg1k0_0916 ENA
+pl lvdb_drl-10930 lvdb       ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0916-03 lvdb_drl-10930 18_10930_0916 4294875200 2112 LOG hitachi_vspg1k1_0916 ENA
+dc lvdb_dco     lvdb         lvdb_dcl
+v  lvdb_dcl     -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvdb_dcl-10925 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 19_10925_0916-02 lvdb_dcl-10925 19_10925_0916 4294873088 2112 0 hitachi_vspg1k0_0916 ENA
+pl lvdb_dcl-10930 lvdb_dcl   ENABLED  ACTIVE   2112     CONCAT    -        RW
+sd 18_10930_0916-02 lvdb_dcl-10930 18_10930_0916 4294873088 2112 0 hitachi_vspg1k1_0916 ENA
+
+Disk group: dgtldbviewtredo1
+
+dg dgtldbviewtredo1 default  default  5000     1584126839.880.lpdbaibir1
+
+dm 18_10930_0918 hitachi_vspg1k1_0918 auto 65536 117940560 -
+dm 19_10925_0918 hitachi_vspg1k0_0918 auto 65536 117940560 -
+
+v  lvredo1      -            ENABLED  ACTIVE   117913600 PREFER   lvredo1-10930 fsgen
+pl lvredo1-10925 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_0918-01 lvredo1-10925 19_10925_0918 0 117913600 0     hitachi_vspg1k0_0918 ENA
+pl lvredo1-10930 lvredo1     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_0918-01 lvredo1-10930 18_10930_0918 0 117913600 0     hitachi_vspg1k1_0918 ENA
+pl lvredo1_drl-10925 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0918-03 lvredo1_drl-10925 19_10925_0918 117915712 2112 LOG hitachi_vspg1k0_0918 ENA
+pl lvredo1_drl-10930 lvredo1 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0918-03 lvredo1_drl-10930 18_10930_0918 117915712 2112 LOG hitachi_vspg1k1_0918 ENA
+dc lvredo1_dco  lvredo1      lvredo1_dcl
+v  lvredo1_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo1_dcl-10925 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_0918-02 lvredo1_dcl-10925 19_10925_0918 117913600 2112 0 hitachi_vspg1k0_0918 ENA
+pl lvredo1_dcl-10930 lvredo1_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_0918-02 lvredo1_dcl-10930 18_10930_0918 117913600 2112 0 hitachi_vspg1k1_0918 ENA
+
+Disk group: dgtldbviewtredo2
+
+dg dgtldbviewtredo2 default  default  18000    1584126846.886.lpdbaibir1
+
+dm 18_10930_0919 hitachi_vspg1k1_0919 auto 65536 117940560 -
+dm 19_10925_0919 hitachi_vspg1k0_0919 auto 65536 117940560 -
+
+v  lvredo2      -            ENABLED  ACTIVE   117913600 PREFER   lvredo2-10930 fsgen
+pl lvredo2-10925 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 19_10925_0919-01 lvredo2-10925 19_10925_0919 0 117913600 0     hitachi_vspg1k0_0919 ENA
+pl lvredo2-10930 lvredo2     ENABLED  ACTIVE   117913600 CONCAT   -        RW
+sd 18_10930_0919-01 lvredo2-10930 18_10930_0919 0 117913600 0     hitachi_vspg1k1_0919 ENA
+pl lvredo2_drl-10925 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 19_10925_0919-03 lvredo2_drl-10925 19_10925_0919 117915712 2112 LOG hitachi_vspg1k0_0919 ENA
+pl lvredo2_drl-10930 lvredo2 ENABLED  ACTIVE   LOGONLY  CONCAT    -        RW
+sd 18_10930_0919-03 lvredo2_drl-10930 18_10930_0919 117915712 2112 LOG hitachi_vspg1k1_0919 ENA
+dc lvredo2_dco  lvredo2      lvredo2_dcl
+v  lvredo2_dcl  -            ENABLED  ACTIVE   2112     SELECT    -        gen
+pl lvredo2_dcl-10925 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 19_10925_0919-02 lvredo2_dcl-10925 19_10925_0919 117913600 2112 0 hitachi_vspg1k0_0919 ENA
+pl lvredo2_dcl-10930 lvredo2_dcl ENABLED ACTIVE 2112    CONCAT    -        RW
+sd 18_10930_0919-02 lvredo2_dcl-10930 18_10930_0919 117913600 2112 0 hitachi_vspg1k1_0919 ENA
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # hagrp -state
+#Group       Attribute             System     Value
+NIC          State                 lpdbaibir1 |ONLINE|
+NIC          State                 lpdbaibir2 |ONLINE|
+ilaidwhd2i   State                 lpdbaibir1 |OFFLINE|
+ilaidwhd2i   State                 lpdbaibir2 |ONLINE|
+ildbdahui    State                 lpdbaibir1 |OFFLINE|
+ildbdahui    State                 lpdbaibir2 |ONLINE|
+ildbviewi    State                 lpdbaibir1 |OFFLINE|
+ildbviewi    State                 lpdbaibir2 |ONLINE|
+tlaidwhdt    State                 lpdbaibir1 |ONLINE|
+tlaidwhdt    State                 lpdbaibir2 |OFFLINE|
+tldbahut     State                 lpdbaibir1 |ONLINE|
+tldbahut     State                 lpdbaibir2 |OFFLINE|
+tldbalphat   State                 lpdbaibir1 |OFFLINE|
+tldbalphat   State                 lpdbaibir2 |ONLINE|
+tldbviewt    State                 lpdbaibir1 |ONLINE|
+tldbviewt    State                 lpdbaibir2 |OFFLINE|
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # hastatus -sum | grep -i online
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+lpdbaibir1:/var/tmp # hastatus -sum
+
+-- SYSTEM STATE
+-- System               State                Frozen
+
+A  lpdbaibir1           RUNNING              0
+A  lpdbaibir2           RUNNING              0
+
+-- GROUP STATE
+-- Group           System               Probed     AutoDisabled    State
+
+B  NIC             lpdbaibir1           Y          N               ONLINE
+B  NIC             lpdbaibir2           Y          N               ONLINE
+B  ilaidwhd2i      lpdbaibir1           Y          N               OFFLINE
+B  ilaidwhd2i      lpdbaibir2           Y          N               ONLINE
+B  ildbdahui       lpdbaibir1           Y          N               OFFLINE
+B  ildbdahui       lpdbaibir2           Y          N               ONLINE
+B  ildbviewi       lpdbaibir1           Y          N               OFFLINE
+B  ildbviewi       lpdbaibir2           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir1           Y          N               ONLINE
+B  tlaidwhdt       lpdbaibir2           Y          N               OFFLINE
+B  tldbahut        lpdbaibir1           Y          N               ONLINE
+B  tldbahut        lpdbaibir2           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir1           Y          N               OFFLINE
+B  tldbalphat      lpdbaibir2           Y          N               ONLINE
+B  tldbviewt       lpdbaibir1           Y          N               ONLINE
+B  tldbviewt       lpdbaibir2           Y          N               OFFLINE
+lpdbaibir1:/var/tmp # rpm -qa --last | grep -i VRTS
+VRTSvxvm-7.4.1.2805-SLES12.x86_64             Fri Jan 14 19:59:41 2022
+VRTSpddea-12.0.0.0-0140.x86_64                Fri Mar 12 14:32:26 2021
+VRTSnbcfg-8.2.0.0-1561464065.x86_64           Fri Mar 12 14:32:26 2021
+VRTSnbclt-8.2.0.0-1561464178.x86_64           Fri Mar 12 14:31:40 2021
+VRTSnbpck-8.2.0.0-1561464233.x86_64           Fri Mar 12 14:31:26 2021
+VRTSpbx-1.11.17.1-1.x86_64                    Fri Mar 12 14:31:22 2021
+VRTSodm-7.4.1.1700-SLES12.x86_64              Mon Oct  5 19:27:19 2020
+VRTSfsadv-7.4.1.0000-SLES12.x86_64            Mon Oct  5 19:24:23 2020
+VRTSvxfs-7.4.1.1700-SLES12.x86_64             Mon Oct  5 19:24:15 2020
+VRTSvxfen-7.4.1.1100-SLES12.x86_64            Mon Oct  5 19:24:09 2020
+VRTSvcsag-7.4.1.0000-SLES12.x86_64            Mon Oct  5 19:24:08 2020
+VRTSaslapm-7.4.1.0000-SLES12.x86_64           Mon Oct  5 19:24:07 2020
+VRTSgab-7.4.1.1100-SLES12.x86_64              Mon Oct  5 19:24:06 2020
+VRTSvcs-7.4.1.0000-SLES12.x86_64              Mon Oct  5 19:24:03 2020
+VRTSllt-7.4.1.1100-SLES12.x86_64              Mon Oct  5 19:23:38 2020
+VRTSvlic-4.01.74.002-SLES.x86_64              Mon Oct  5 19:23:37 2020
+VRTSpython-3.6.6.1-SLES12.x86_64              Mon Oct  5 19:23:26 2020
+VRTSsfmh-7.4.0.200-0.x86_64                   Mon Oct  5 19:22:59 2020
+VRTSveki-7.4.1.1100-SLES12.x86_64             Mon Oct  5 19:22:55 2020
+VRTSperl-5.26.1.1-SLES12.x86_64               Mon Oct  5 19:22:55 2020
+VRTSspt-7.4.1.000-SLES12.noarch               Mon Oct  5 19:22:54 2020
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp #
+lpdbaibir1:/var/tmp # rpm -qa --last | grep -i VRTS | wc -l
+21
+lpdbaibir1:/var/tmp # lltstate -nvv configured
+bash: lltstate: command not found
+lpdbaibir1:/var/tmp # lltstate -nvv
+bash: lltstate: command not found
+lpdbaibir1:/var/tmp # lltstate -nv
+bash: lltstate: command not found
+lpdbaibir1:/var/tmp # cd
+lpdbaibir1:~ # cat /etc/gabtab
+/sbin/gabconfig -c -n2
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # cat /etc/llthosts
+0 lpdbaibir1
+1 lpdbaibir2
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # rpm -qa | egrep -E "VRTSodm|VRTSvxfs|VRTSvxvm"
+VRTSodm-7.4.1.1700-SLES12.x86_64
+VRTSvxfs-7.4.1.1700-SLES12.x86_64
+VRTSvxvm-7.4.1.2805-SLES12.x86_64
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # ifconfig -a
+bond0     Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          inet addr:160.46.183.18  Bcast:160.46.183.255  Mask:255.255.255.0
+          inet6 addr: fe80::266e:96ff:feba:7c38/64 Scope:Link
+          inet6 addr: 2a03:1e80:a01:507::1:8/64 Scope:Global
+          UP BROADCAST RUNNING MASTER MULTICAST  MTU:1500  Metric:1
+          RX packets:6962999774 errors:0 dropped:2471628 overruns:0 frame:0
+          TX packets:13607866322 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:2665049771804 (2541589.5 Mb)  TX bytes:15413188385064 (14699161.8 Mb)
+
+bond0:0   Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          inet addr:160.46.183.154  Bcast:160.46.183.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MASTER MULTICAST  MTU:1500  Metric:1
+
+bond0:1   Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          inet addr:160.46.183.155  Bcast:160.46.183.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MASTER MULTICAST  MTU:1500  Metric:1
+
+bond0:2   Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          inet addr:160.46.183.152  Bcast:160.46.183.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MASTER MULTICAST  MTU:1500  Metric:1
+
+eth0      Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          UP BROADCAST RUNNING SLAVE MULTICAST  MTU:1500  Metric:1
+          RX packets:6953651413 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:13607308654 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:2664284720727 (2540859.9 Mb)  TX bytes:15413109196168 (14699086.3 Mb)
+
+eth1      Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:39
+          inet addr:10.100.128.17  Bcast:10.100.128.255  Mask:255.255.255.0
+          inet6 addr: 2a03:1e80:a04:564::1:2/64 Scope:Global
+          inet6 addr: fe80::266e:96ff:feba:7c39/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1106400938 errors:0 dropped:2 overruns:0 frame:0
+          TX packets:21644623315 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:75551592540 (72051.6 Mb)  TX bytes:32511215422063 (31005111.1 Mb)
+
+eth2      Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:3A
+          inet addr:160.48.107.196  Bcast:160.48.107.255  Mask:255.255.255.0
+          inet6 addr: 2a03:1e80:a03:501::1:196/64 Scope:Global
+          inet6 addr: fe80::266e:96ff:feba:7c3a/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:23136067 errors:0 dropped:5 overruns:0 frame:0
+          TX packets:18939380 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1711043097 (1631.7 Mb)  TX bytes:1618702643 (1543.7 Mb)
+
+eth3      Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:38
+          UP BROADCAST RUNNING SLAVE MULTICAST  MTU:1500  Metric:1
+          RX packets:9348359 errors:0 dropped:2471624 overruns:0 frame:0
+          TX packets:557668 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:765050581 (729.6 Mb)  TX bytes:79188896 (75.5 Mb)
+
+eth4      Link encap:Ethernet  HWaddr 24:6E:96:BA:7C:3B
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+eth5      Link encap:Ethernet  HWaddr B4:96:91:25:0B:50
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+eth7      Link encap:Ethernet  HWaddr 58:8A:5A:FB:0C:65
+          inet addr:169.254.0.2  Bcast:169.254.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::5a8a:5aff:fefb:c65/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1570756 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1776745 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:79102286 (75.4 Mb)  TX bytes:128455184 (122.5 Mb)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:818728372 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:818728372 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1521257678734 (1450784.3 Mb)  TX bytes:1521257678734 (1450784.3 Mb)
+
+lpdbaibir1:~ # cat /etc/SuSE-release
+SUSE Linux Enterprise Server 12 (x86_64)
+VERSION = 12
+PATCHLEVEL = 4
+# This file is deprecated and will be removed in a future service pack or release.
+# Please check /etc/os-release for details about this release.
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # cat /etc/rudder_vars.lst
+#########################
+## Whole File Generated by Rudder Rule APP-CMS-Variables
+## *** DO NOT EDIT ***
+## Directive: File CMS Rudder Variables
+## CMDVAR: sys.policy_hub, var_REPO, var_REPO_IP, var_REPO_FQDN, var_RUDDER_MR_VERSION, var_RUDDER_MR_DEFAULT
+
+
+RELAY="10.30.16.151"
+
+REPO="cm-repo-emea"
+REPO_IP="10.30.73.43"
+REPO_FQDN="cm-repo-emea.bmwgroup.net"
+RUDDER_MR_VERSION="2021Q03.00"
+RUDDER_MR_DEFAULT="2022Q02.00"
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #  df -hTP
+Filesystem                           Type      Size  Used Avail Use% Mounted on
+devtmpfs                             devtmpfs  188G  8.0K  188G   1% /dev
+tmpfs                                tmpfs     188G  8.0K  188G   1% /dev/shm
+tmpfs                                tmpfs     188G  6.8M  188G   1% /run
+tmpfs                                tmpfs     188G     0  188G   0% /sys/fs/cgroup
+/dev/sda2                            btrfs     101G   32G   68G  32% /
+/dev/sda2                            btrfs     101G   32G   68G  32% /lfs
+/dev/sda2                            btrfs     101G   32G   68G  32% /var/cache
+/dev/sda2                            btrfs     101G   32G   68G  32% /tmp
+/dev/sda2                            btrfs     101G   32G   68G  32% /opt
+/dev/sda2                            btrfs     101G   32G   68G  32% /var/opt
+/dev/sda2                            btrfs     101G   32G   68G  32% /var/log
+/dev/sda2                            btrfs     101G   32G   68G  32% /.snapshots
+/dev/sda2                            btrfs     101G   32G   68G  32% /var/spool
+/dev/sda2                            btrfs     101G   32G   68G  32% /home
+/dev/sda2                            btrfs     101G   32G   68G  32% /global/local
+/dev/sda2                            btrfs     101G   32G   68G  32% /var/tmp
+/dev/sda1                            ext3      976M  102M  824M  11% /boot
+/dev/mapper/vglocal-lvvarcrash       xfs        50G   33M   50G   1% /var/crash
+tmpfs                                tmpfs     4.0K     0  4.0K   0% /dev/vx
+/dev/vx/dsk/dgoracle/lvoracle        vxfs      175G  124G   52G  71% /lfs/oracle
+/dev/vx/dsk/dgoracle/lvoracleaudit   vxfs       50G  262M   50G   1% /lfs/oracle_audit
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/66159
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/48952
+/dev/vx/dsk/dgtlaidwhdtredo1/lvredo1 vxfs       57G  8.5G   45G  16% /global/tlaidwhdt/redo1
+/dev/vx/dsk/dgtlaidwhdtredo2/lvredo2 vxfs       57G  8.1G   46G  16% /global/tlaidwhdt/redo2
+/dev/vx/dsk/dgtlaidwhdtbkup/lvbkup   vxfs      1.5T  3.0G  1.5T   1% /global/tlaidwhdt/bkup
+/dev/vx/dsk/dgtlaidwhdtdb/lvdb       vxfs      3.0T  1.5T  1.6T  50% /global/tlaidwhdt/db
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/160
+/dev/vx/dsk/dgtldbahutbkup/lvbkup    vxfs      507G   65G  438G  13% /global/tldbahut/bkup
+/dev/vx/dsk/dgtldbahutredo2/lvredo2  vxfs       57G  4.1G   49G   8% /global/tldbahut/redo2
+/dev/vx/dsk/dgtldbahutredo1/lvredo1  vxfs       57G  4.6G   49G   9% /global/tldbahut/redo1
+/dev/vx/dsk/dgtldbahutdb/lvdb        vxfs      4.5T  3.7T  868G  82% /global/tldbahut/db
+/dev/vx/dsk/dgtldbviewtredo1/lvredo1 vxfs       57G   33G   23G  60% /global/tldbviewt/redo1
+/dev/vx/dsk/dgtldbviewtbkup/lvbkup   vxfs      731G   39G  687G   6% /global/tldbviewt/bkup
+/dev/vx/dsk/dgtldbviewtredo2/lvredo2 vxfs       57G   33G   23G  59% /global/tldbviewt/redo2
+/dev/vx/dsk/dgtldbviewtdb/lvdb       vxfs      4.5T  1.8T  2.8T  39% /global/tldbviewt/db
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/848949
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/860414
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/0
+tmpfs                                tmpfs      38G     0   38G   0% /run/user/44035
+lpdbaibir1:~ #  netstat -rn
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         160.46.183.1    0.0.0.0         UG        0 0          0 bond0
+10.100.128.0    0.0.0.0         255.255.255.0   U         0 0          0 eth1
+160.46.183.0    0.0.0.0         255.255.255.0   U         0 0          0 bond0
+160.48.107.0    0.0.0.0         255.255.255.0   U         0 0          0 eth2
+169.254.0.0     0.0.0.0         255.255.0.0     U         0 0          0 eth7
+lpdbaibir1:~ # cat /etc/fstab
+###
+### OS mounts
+###
+LABEL=ROOT                    /                             btrfs     defaults                      0 1
+LABEL=BOOT                    /boot                         ext3      defaults                      0 1
+LABEL=ROOT                    /lfs                          btrfs     subvol=@/lfs                  0 0
+LABEL=ROOT                    /home                         btrfs     subvol=@/home                 0 0
+LABEL=ROOT                    /opt                          btrfs     subvol=@/opt                  0 0
+LABEL=ROOT                    /tmp                          btrfs     subvol=@/tmp                  0 0
+LABEL=ROOT                    /var/log                      btrfs     subvol=@/var/log              0 0
+LABEL=ROOT                    /var/opt                      btrfs     subvol=@/var/opt              0 0
+LABEL=ROOT                    /var/spool                    btrfs     subvol=@/var/spool            0 0
+LABEL=ROOT                    /var/cache                    btrfs     subvol=@/var/cache            0 0
+LABEL=ROOT                    /global/local                 btrfs     subvol=@/global/local         0 0
+LABEL=ROOT                    /var/tmp                      btrfs     subvol=@/var/tmp              0 0
+LABEL=ROOT                    /.snapshots                   btrfs     subvol=@/.snapshots           0 0
+LABEL=SWAP                    swap                          swap      pri=42                        0 0
+LABEL=LVVARCRASH              /var/crash                    xfs       defaults                      0 0
+
+###
+### Application mounts
+### Mandatory mount options for SAN/NAS: nofail,x-systemd.device-timeout=20
+###
+
+
+        # NOTE: When adding or modifying VxFS or VxVM entries, add 'nofail'
+        # to the mount options to avoid boot failure during system bootup
+        # if systemd tries to mount filesystem before VxVM and VXFS have
+        # started.
+
+# Added by vxctl 2018-08-17 10:18:46
+/dev/vx/dsk/dgoracle/lvoracle /lfs/oracle vxfs _netdev 0 0
+/dev/vx/dsk/dgoracle/lvoracleaudit /lfs/oracle_audit vxfs _netdev 0 0
+
+
+# Added by vxctl 2018-11-15 16:20:11
+
+# Added by vxctl 2018-11-15 18:05:58
+
+# Added by vxctl 2019-02-19 13:59:08
+
+# Added by vxctl 2019-02-19 17:17:05
+
+# Added by vxctl 2019-03-22 14:22:27
+
+# Added by vxctl 2019-03-28 15:27:55
+
+# Added by vxctl 2020-03-13 20:14:12
+
+# Added by vxctl 2020-03-18 10:21:58
+
+# Added by vxctl 2020-03-19 12:26:45
+
+# Added by vxctl 2021-09-17 09:08:56
+
+# Added by vxctl 2021-09-17 09:09:42
+
+# Added by vxctl 2021-09-21 21:39:56
+
+# Added by vxctl 2021-10-21 16:25:26
+
+# Added by vxctl 2022-01-07 13:35:09
+
+# Added by vxctl 2022-01-07 13:36:02
+
+# Added by vxctl 2022-01-07 20:45:30
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # lltstat  -nvv active
+LLT node information:
+    Node                 State    Link  Status  Address
+   * 0 lpdbaibir1        OPEN
+                                  link1   UP      24:6E:96:BA:7C:38
+                                  link2   UP      24:6E:96:BA:7C:39
+                                  link3   UP      24:6E:96:BA:7C:3A
+     1 lpdbaibir2        OPEN
+                                  link1   UP      24:6E:96:BA:80:C8
+                                  link2   UP      24:6E:96:BA:80:C9
+                                  link3   UP      24:6E:96:BA:80:CA
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ #
+lpdbaibir1:~ # gabconfig  -a
+GAB Port Memberships
+===============================================================
+Port a gen   3ab806 membership 01
+Port h gen   3ab805 membership 01
+lpdbaibir1:~ #
+
+
+
+  290  2022-04-21 13:52:25 ##############--- 20220421.135225 ---##############
+  291  2022-04-21 13:52:31 hastatus -sum
+  292  2022-04-21 13:52:41 hastatus -sum | grep -i online
+  293  2022-04-21 13:53:24 cat /etc/BMW-release
+  294  2022-04-21 13:57:51 ls -l /etc/BMW-release
+  295  2022-04-21 14:12:26 cat /etc/BMW-release;cat /etc/rudder_vars.lst
+  296  2022-04-21 14:14:06 zypper lr
+  297  2022-04-21 14:28:53 hastatus -sum|grep ONLINE|awk {'print$2" "$3'}
+  298  2022-04-21 14:58:51 cd /var/tmp/
+  299  2022-04-21 14:58:54 /check_dlv_dgv.sh
+  300  2022-04-21 14:59:00 ls -lrta
+  301  2022-04-21 14:59:06 ./check_dlv_dgv.sh
+  302  2022-04-21 15:03:41 vxdg list
+  303  2022-04-21 15:06:52 rpm -qa | grep -i vee
+  304  2022-04-21 15:09:03 df -hPT | grep -i vxfs
+  305  2022-04-21 15:09:17 date
+  306  2022-04-21 15:14:01 hastatus -sum
+  307  2022-04-21 15:14:06 date
+  308  2022-04-21 15:14:39 san_shortinfo
+  309  2022-04-21 16:36:36 cat /etc/BMW-release | grep -i mr
+  310  2022-04-21 16:36:52 vxdg list
+  311  2022-04-21 16:37:08 vxdg list | wc -l
+  312  2022-04-21 16:37:26 vxdisk -eo alldgs list
+  313  2022-04-21 16:37:39 vxdisk -eo alldgs list | wc -l
+  314  2022-04-21 16:37:51 san_shortinfo | wc -l
+  315  2022-04-21 16:38:04 san_shortinfo
+  316  2022-04-21 16:38:16 san_info -s
+  317  2022-04-21 16:38:31 vxprint -htq
+  318  2022-04-21 16:38:39 hagrp -state
+  319  2022-04-21 16:57:46 hastatus -sum | grep -i online
+  320  2022-04-21 16:57:51 hastatus -sum
+  321  2022-04-21 16:58:09 rpm -qa --last | grep -i VRTS
+  322  2022-04-21 16:58:31 rpm -qa --last | grep -i VRTS | wc -l
+  323  2022-04-21 16:59:07 lltstate -nvv configured
+  324  2022-04-21 16:59:15 lltstate -nvv
+  325  2022-04-21 16:59:20 lltstate -nv
+  326  2022-04-21 16:59:26 cd
+  327  2022-04-21 16:59:45 cat /etc/gabtab
+  328  2022-04-21 17:00:48 cat /etc/llthosts
+  329  2022-04-21 17:04:55 rpm -qa | egrep -E "VRTSodm|VRTSvxfs|VRTSvxvm"
+  330  2022-04-21 17:05:23 ifconfig -a
+  331  2022-04-21 17:05:59 cat /etc/SuSE-release
+  332  2022-04-21 17:06:14 cat /etc/rudder_vars.lst
+  333  2022-04-21 17:06:41  df -hTP
+  334  2022-04-21 17:07:59  netstat -rn
+  335  2022-04-21 17:08:12 cat /etc/fstab
+  336  2022-04-21 17:08:29 lltstat  -nvv active
+  337  2022-04-21 17:08:42 gabconfig  -a
+  338  2022-04-21 17:42:56 history
+
+
+
+
+
+
+

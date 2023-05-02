@@ -1,0 +1,102 @@
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ cmdb ltbkappnf05vm -x
+******************************************
+Server: ltbkappnf05vm.bmwgroup.net
+******************************************
+machine type:          XEN-Guest
+vendor:                -
+OS version:            SP4
+OS name:               SLES 12
+Rollout type:          DELEGATE
+serial number:         JBF1X53
+Instserv:              lpinstiaas02
+Logical ID:            SLOG-90659
+Rudder UUID:           f7190484-9502-461e-ac31-be7f1be54c9a
+Rudder PolSrv:         cm-relay-bss-sles12-emea-ti.bmwgroup.net
+location:              01.93 / 001.0 / 00.0 / RZ1
+lampe:                 C5
+rack ID:               RZ-012076
+description:           Provision_CRQ000001560320_11/24/2020
+modul:                 Web
+usage:                 Web_BK_TEST
+service owner:         NTT_DATA
+status:                Produktiv
+DNS domain:            .bmwgroup.net
+nagios:                Y
+virtual server:        Y
+farm name:             libkxentwa12001.bmwgroup.net|libkxentwa12002.bmwgroup.net
+farmservers:           libkxentwa12001, libkxentwa12002
+service contract:      IAAS_NTT_LI-UX_SRV
+Inventar Nr:           -
+BU-Name:               Bank-BU
+BU-EMail:              Georgi.Tomov@partner.bmw.de
+accountable BU-EMail:  andreas.wa.wolf@bmw.de,Stephan.Pulina@bmwgroup.com
+criticality:           Uncritical
+
+
+
+ltbkappnf05vm.bmwgroup.net
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ fullcheck ltbkappnf05vm
+====================================================================================================
+ Hardware Type: Xen PV Guest on 'libkxentwa12001'
+ Serial No.   : Xen UUID '81c4282b-185a-431b-8613-7a0bb36ffc7d'
+ Node name    : ltbkappnf05vm
+ Local time   : Thu Apr 21 13:43:20 CEST 2022
+====================================================================================================
+ FQDN: ltbkappnf05vm.bmwgroup.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ OSVer: SUSE Linux Enterprise Server 12 (x86_64)
+ OSVer: VERSION = 12
+ OSVer: PATCHLEVEL = 4
+ OSVer: # This file is deprecated and will be removed in a future service pack or release.
+ OSVer: # Please check /etc/os-release for details about this release.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Uptime: Booted: 2021.10.13. 06:20:43
+ Uptime: Uptime: 190d 7h 22m 37s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ MR: M21-Q4-12.4                                                                             [NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Kernel: 4.12.14-95.80-default
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Glibc: 2.22-114.8.3.x86_64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ETH:  OSDEV  PCI ID  DRIVER  DRVVER  SPEED  DPLX  LINK  MAC ADDRESS        IP / SUBNET        IPV6 / PREFIX
+ ETH:  eth0   vif-0   vif     -       -      -     yes   5e:e2:6c:bd:0f:08  160.46.180.174/24  2a03:1e80:a01:504::1:52/64
+ ETH:  eth1   vif-1   vif     -       -      -     yes   4a:c0:82:88:fc:e6  10.100.12.95/24    2a03:1e80:a04:52b::1:66/64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#F NOTE: DCODB returned empty string on CriticalEvent/ltbkappnf05vm (no critical events)
+# SODB end (0 FW Status notes, no remarks, 0 special configs, 0 events, 0 tags, host:ltbkappnf05vm)
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+
+
+
+
+ltbkappnf05vm.bmwgroup.net
+
+
+downtime -a -h 2 -c TAS000006381937 qxz10kv-MRVM' ltbkappnf05vm.bmwgroup.net
+
+
+
+rudderswinst -t TAS000006381937 update ltbkappnf05vm.bmwgroup.net
+
+rudderswinst -t TAS000006381937 install ltbkappnf05vm MW-SecFS
+
+
+uptime;cat /etc/issue;df -hT;cat /etc/issue;cat /etc/fstab;lsblk;pvs;vgs;lvs;pvdisplay;vgdisplay;lvdisplay;ifconfig -a;netstat -nrv;route -n;cd /etc/sysconfig/network/;ls;cat ifcfg-eth0;cat ifcfg-eth1;cat ifroute-eth1;cat routes;cd;df -h | grep -i sec;cat /etc/rudder_vars.lst;rpm -qa | grep -i vee;ls -l /etc/BMW-release; cat /etc/BMW-release | grep -i current
+
+
+
+
+
+
+
+
+
+
+
+
+

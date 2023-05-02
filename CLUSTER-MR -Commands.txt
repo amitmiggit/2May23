@@ -1,0 +1,190 @@
+hastatus -sum|grep ONLINE|awk {'print$2" "$3'}
+for PKG in `hastatus -sum | awk '/^B/ {print $2}' | egrep -v NIC | sort -u`; do echo "Stopping $PKG"; hagrp -offline $PKG -any ; done
+watch hastatus -sum
+hastatus -sum
+haconf -makerw
+for PKG in `hastatus -sum | awk '/^B/ {print $2}' | egrep -v NIC | sort -u`; do echo "Freeze $PKG"; hagrp -freeze $PKG -persistent; done
+haconf -dump -makero
+
+
+TAS000006137356
+
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ get_rmb_password lpdbaibir1k
+Administrator|3E972F7B2C26
+Administrator2|B8F874C5C864
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ c6000 lpdbaibir1k
+.------------------------------------------------.
+|                   lpdbaibir1k                  |
++---------------+--------------------------------+
+| key           | value                          |
++---------------+--------------------------------+
+| HOSTNAME      |                    lpdbaibir1k |
+| DOMAIN        |                   bmwgroup.net |
+| LOG_SERVER_ID |        lpdbaibir1.bmwgroup.net |
+| ALIAS         |                                |
+| IP_ADDRESS    |                 160.48.107.195 |
+| NSI           |                           217B |
+| SUBNETMASK    |                  255.255.255.0 |
+| GATEWAY       |                   160.48.107.1 |
+| NET_ID        |                   160.48.107.0 |
+| INT_VLAN      |                            107 |
+| SUB_AREA      |                                |
+| BROADCAST     |                 160.48.107.255 |
+'---------------+--------------------------------'
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ get_rmb_password lpdbaibir2k
+Administrator|A90D2E019DA0
+Administrator2|BD8A0F70DA8D
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ c6000 lpdbaibir2k
+.------------------------------------------------.
+|                   lpdbaibir2k                  |
++---------------+--------------------------------+
+| key           | value                          |
++---------------+--------------------------------+
+| HOSTNAME      |                    lpdbaibir2k |
+| DOMAIN        |                   bmwgroup.net |
+| LOG_SERVER_ID |        lpdbaibir2.bmwgroup.net |
+| ALIAS         |                                |
+| IP_ADDRESS    |                 160.48.107.197 |
+| NSI           |                           2T9N |
+| SUBNETMASK    |                  255.255.255.0 |
+| GATEWAY       |                   160.48.107.1 |
+| NET_ID        |                   160.48.107.0 |
+| INT_VLAN      |                            107 |
+| SUB_AREA      |                                |
+| BROADCAST     |                 160.48.107.255 |
+'---------------+--------------------------------'
+
+
+
+=============================================================
+
+hastop -local -force   
+systemctl stop vcs              
+systemctl stop gab           
+gabconfig -U                 
+systemctl stop vxfen
+systemctl stop llt       
+lltconfig -U                   
+rmmod vxfen                 
+rmmod gab                         
+rmmod llt 
+systemctl stop syslog                
+umount /lfs/oracle_audit             
+umount /lfs/oracle     
+systemctl stop vxodm                 
+systemctl stop vxvm-boot             
+systemctl stop vxfs                  
+systemctl stop vxodm.service
+systemctl stop vxfs_replication.service
+systemctl stop vxnm-vxnetd.service
+systemctl stop vxpbx_exchanged.service
+systemctl stop vxrsyncd.service
+systemctl stop vxvm-boot.service
+systemctl stop vxvm-encrypt.service
+systemctl stop vxvm-reconfig.service
+systemctl stop vxvm-recover.service
+
+
+
+=============================
+
+
+
+[?4/?21/?2022 7:37 PM] Arora Sanjeev, (Sanjeev.Arora@partner.bmw.de): 
+uptime
+xenstore-read /tool/hostname
+cat /etc/SuSE-release
+ls -lrt /etc/BMW-release
+ cat /etc/BMW-release
+who -b 
+cat /etc/issue
+cat /etc/BMW-release| grep -i mr
+ls -lrt /etc/BMW-release
+cat /etc/SuSE-release
+df -hT
+pvs
+lvs
+vgs
+pvdisplay
+vgdisplay
+lvdisplay
+ifconfig -a
+route 
+sync
+lsblk
+ip add 
+cat /etc/BMW-release | grep -i mr 
+
+
+=========================================
+
+
+
+
+===============================================
+uptime
+cat /etc/SuSE-release
+ls -lrt /etc/BMW-release
+cat /etc/BMW-release
+who -b 
+cat /etc/issue
+cat /etc/BMW-release| grep -i mr
+ls -lrt /etc/BMW-release
+cat /etc/SuSE-release
+df -hT
+pvs
+lvs
+vgs
+pvdisplay
+vgdisplay
+lvdisplay
+ifconfig -a
+route 
+sync
+lsblk
+ip add 
+cat /etc/BMW-release | grep -i mr 
+vxdg list
+vxdg list | wc -l 
+vxdisk -eo alldgs list
+vxdisk -eo alldgs list | wc -l
+san_shortinfo | wc -l
+san_shortinfo
+san_info -s
+vxprint -htq
+hagrp -state
+hastatus -sum 
+hastatus -sum | grep -i online
+rpm -qa --last | grep -i VRTS
+rpm -qa --last | grep -i VRTS | wc -l
+lltstate -nv
+cat /etc/gabtab
+cat /etc/llthosts
+ps -efl | grep -i had 
+vcs package offline
+vcs package freeze
+[?4/?21/?2022 7:38 PM] Arora Sanjeev, (Sanjeev.Arora@partner.bmw.de): 
+vcs cmd to sop vcs service on cluster
+downtime
+MR
+reboot
+We saved this conversation. You'll see it soon in the Conversations tab in Skype for Business and in the Conversation History folder in Outlook.
+
+
+
+
+
+=========================
+
+
+
+
+
+
+

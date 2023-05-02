@@ -1,0 +1,76 @@
+rudderswinst -t TAS000006207080 ipu_12.4_12.5 ltdb0196vm.bmwgroup.net
+
+
+sodb_tag_mgmt -s -t ipu_12.4_12.5 ltdb0196vm.bmwgroup.net
+
+
+=================
+
+
+ltbkapp12103vm:~ # df -hT | grep -i secfs
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ # cat /etc/SuSE-release
+SUSE Linux Enterprise Server 12 (x86_64)
+VERSION = 12
+PATCHLEVEL = 4
+# This file is deprecated and will be removed in a future service pack or release.
+# Please check /etc/os-release for details about this release.
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ # date
+Thu Apr 21 14:54:29 CEST 2022
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ # rpm -qa | grep -i vee
+ltbkapp12103vm:~ #
+ltbkapp12103vm:~ # secfsd -status guard
+bash: secfsd: command not found
+ltbkapp12103vm:~ #
+
+
+
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $ fullcheck ltbkapp12103vm
+====================================================================================================
+ Hardware Type: VMware Virtual Platform
+ Serial No.   : VMware-42 30 bc 9f f9 4c 27 c2-42 46 bb 28 57 e4 5e 44
+ Node name    : ltbkapp12103vm
+ Local time   : Thu Apr 21 14:57:29 CEST 2022
+====================================================================================================
+ FQDN: ltbkapp12103vm.bmwgroup.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ OSVer: SUSE Linux Enterprise Server 12 (x86_64)
+ OSVer: VERSION = 12
+ OSVer: PATCHLEVEL = 4
+ OSVer: # This file is deprecated and will be removed in a future service pack or release.
+ OSVer: # Please check /etc/os-release for details about this release.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Uptime: Booted: 2021.10.14. 18:25:53
+ Uptime: Uptime: 188d 20h 31m 36s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ MR: M21-Q4-12.4                                                                             [NOK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Kernel: 4.12.14-95.80-default
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Glibc: 2.22-114.8.3.x86_64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ BootL: /dev/sda: GRUB (GRUB)                                                                 [OK]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ETH:  OSDEV  PCI ID        DRIVER   DRVVER     SPEED      DPLX  LINK  MAC ADDRESS        IP / SUBNET        IPV6 / PREFIX
+ ETH:  eth0   0000:0b:00.0  vmxnet3  1.5.0.0-k  10000Mb/s  Full  yes   00:50:56:b0:17:a1  10.30.73.64/21     2a03:1e80:a15:585::111/64
+ ETH:  eth1   0000:13:00.0  vmxnet3  1.5.0.0-k  10000Mb/s  Full  yes   00:50:56:b0:f6:46  10.231.184.181/21  2a03:1e80:a16:528::1:ac/64
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LLDP: Interface  Link state  Speed      Duplex  Switch Chassis  Switch Port  VLAN ID
+ LLDP: eth0       UP          10000Mb/s  Full    Not Present     Not Present  unknown
+ LLDP: eth1       UP          10000Mb/s  Full    Not Present     Not Present  unknown
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#F NOTE: DCODB returned empty string on CriticalEvent/ltbkapp12103vm (no critical events)
+# SODB end (0 FW Status notes, no remarks, 0 special configs, 0 events, 0 tags, host:ltbkapp12103vm)
+[INSTSERV][qxz10kv][lpinstiaas02] ~ $
+
+
+

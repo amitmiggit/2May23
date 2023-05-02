@@ -1,0 +1,11 @@
+TAS000006381937	Amit Misra - 21.04.2022 21:30:00  to 21.04.2022 23:30:00 - server-unix-std:global|06|101a-Masterrelease Update (VM)
+TAS000006393065	Amit Misra - 21.04.2022 22:30:00  to 22.04.2022 04:30:00 - server-unix-std:global|06|101a-Masterrelease Update(Veritas Cluster)
+TAS000006393213	Amit Misra - 21.04.2022 23:00:00  to 23.04.2022 23:00:00 - server-unix-std:global|06|035s-nfs-mount-filesystem
+TAS000006377650	Amit Misra - 22.04.2022 01:30:00  to 22.04.2022 03:30:00 - server-unix-std:global|06|OS SLES In-Place Upgrade Implementation (VM)
+
+
+TAS000006377958	Amit Misra - 22.04.2022 21:30:00  to 23.04.2022 06:30:00 - server-unix-std:global|06|023c-cluster-migrate-package
+TAS000006370445	Amit Misra - 22.04.2022 23:30:00  to 23.04.2022 01:30:00 - server-unix-std:global|06|OS SLES In-Place Upgrade Implementation (VM)
+TAS000006387672	Amit Misra - 23.04.2022 03:30:00  to 23.04.2022 07:30:00 - Server Ops Task: Bank Web PROD Environment xenfarm VM’s migration
+TAS000006355121	Amit Misra - 23.04.2022 05:30:00  to 23.04.2022 16:00:00 - #VCENTER  Request to set maintenance mode. Permanent power migration of New UPS 2B-3 (Source B) from temporary UPS source
+
